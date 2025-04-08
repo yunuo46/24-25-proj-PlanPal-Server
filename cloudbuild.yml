@@ -19,13 +19,13 @@ steps:
   # Docker Build
   - name: 'gcr.io/cloud-builders/docker'
     args: ['build', '-t',
-           'asia-northeast3-docker.pkg.dev/gen-lang-client-0798322573/planpal-server/planpal',
+           'asia-northeast3-docker.pkg.dev/gen-lang-client-0798322573/planpal-server/planpal-server',
            '.']
 
   # Docker Push
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push',
-           'asia-northeast3-docker.pkg.dev/gen-lang-client-0798322573/planpal-server/planpal']
+           'asia-northeast3-docker.pkg.dev/gen-lang-client-0798322573/planpal-server/planpal-server']
 
   # Deploy to Cloud run
   - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
@@ -34,9 +34,9 @@ steps:
       [
         "run",
         "deploy",
-        "planpal-client",
+        "planpal-server",
         "--image",
-        "asia-northeast3-docker.pkg.dev/gen-lang-client-0798322573/planpal-server/planpal:$SHORT_SHA",
+        "asia-northeast3-docker.pkg.dev/gen-lang-client-0798322573/planpal-server/planpal-server:$SHORT_SHA",
         "--region",
         "asia-northeast3",
         "—platform",
@@ -48,4 +48,4 @@ options:
   logging: CLOUD_LOGGING_ONLY
 
 images:
-  - 'asia-northeast3-docker.pkg.dev/gen-lang-client-0798322573/planpal-server/planpal'
+  - 'asia-northeast3-docker.pkg.dev/gen-lang-client-0798322573/planpal-server/planpal-server'
