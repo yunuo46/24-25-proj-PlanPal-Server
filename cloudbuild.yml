@@ -13,7 +13,8 @@ steps:
     secretEnv: ['SECRET_ENV']
 
   # Gradle Build
-  - name: 'gcr.io/cloud-builders/gradle'
+  - name: 'gcr.io/openjdk-project/openjdk17'
+    entrypoint: './gradlew'
     args: [ 'build' ]
 
   # Docker Build
