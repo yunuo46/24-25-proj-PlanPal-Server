@@ -11,7 +11,7 @@ public class JwtUtil {
     public static void setRefreshTokenInCookie(HttpServletResponse response, String refreshToken) {
         Cookie cookie = new Cookie("refreshToken", refreshToken);
         cookie.setHttpOnly(true);
-        cookie.setPath("/");  // 쿠키가 유효한 경로 설정
+        cookie.setPath("/");
         cookie.setMaxAge(5 * 24 * 60 * 60);
         response.addCookie(cookie);
     }
