@@ -1,8 +1,8 @@
-package com.gdg.planpal.infra.oauth.google;
+package com.gdg.planpal.infra.domain.oauth.google;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.gdg.planpal.infra.oauth.OauthInfoResponse;
-import com.gdg.planpal.infra.oauth.OauthProvider;
+import com.gdg.planpal.infra.domain.oauth.OauthInfoResponse;
+import com.gdg.planpal.infra.domain.oauth.OauthProvider;
 import lombok.Getter;
 
 @Getter

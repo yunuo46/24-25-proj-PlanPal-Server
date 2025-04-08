@@ -1,8 +1,8 @@
-package com.gdg.planpal.infra.oauth.google;
+package com.gdg.planpal.infra.domain.oauth.google;
 
-import com.gdg.planpal.infra.oauth.OauthProvider;
+import com.gdg.planpal.infra.domain.oauth.OauthProvider;
 import lombok.*;
-import com.gdg.planpal.infra.oauth.OauthLoginParams;
+import com.gdg.planpal.infra.domain.oauth.OauthLoginParams;
 
 @Getter
 @NoArgsConstructor

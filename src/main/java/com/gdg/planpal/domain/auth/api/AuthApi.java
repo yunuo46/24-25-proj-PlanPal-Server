@@ -4,7 +4,7 @@ import com.gdg.planpal.domain.auth.application.OauthLoginService;
 import com.gdg.planpal.domain.auth.dto.Tokens;
 import com.gdg.planpal.domain.auth.dto.response.TokenResponse;
 import com.gdg.planpal.domain.auth.util.JwtUtil;
-import com.gdg.planpal.infra.oauth.google.GoogleLoginParams;
+import com.gdg.planpal.infra.domain.oauth.google.GoogleLoginParams;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +23,7 @@ public class AuthApi {
     @PostMapping("/google")
     public ResponseEntity<?> loginGoogle(@RequestBody GoogleLoginParams params, HttpServletResponse response) {
         Tokens tokens = oauthLoginService.login(params);
-        System.out.println("login Kakao finished");
+        System.out.println("login google finished");
         TokenResponse tokenResponseDto = JwtUtil.setJwtResponse(response, tokens);
         return ResponseEntity.ok(tokenResponseDto);
     }

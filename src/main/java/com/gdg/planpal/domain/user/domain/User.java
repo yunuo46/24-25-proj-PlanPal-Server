@@ -1,6 +1,6 @@
 package com.gdg.planpal.domain.user.domain;
 
-import com.gdg.planpal.infra.oauth.OauthProvider;
+import com.gdg.planpal.infra.domain.oauth.OauthProvider;
 import jakarta.persistence.*;
 import lombok.*;
 

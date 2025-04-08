@@ -1,4 +1,4 @@
-package com.gdg.planpal.infra.oauth;
+package com.gdg.planpal.infra.domain.oauth;
 
 import org.springframework.stereotype.Service;
 

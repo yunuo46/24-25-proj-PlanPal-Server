@@ -1,8 +1,8 @@
 package com.gdg.planpal.domain.auth.application;
 
-import com.gdg.planpal.infra.oauth.OauthInfoResponse;
-import com.gdg.planpal.infra.oauth.OauthLoginParams;
-import com.gdg.planpal.infra.oauth.RequestOauthInfoService;
+import com.gdg.planpal.infra.domain.oauth.OauthInfoResponse;
+import com.gdg.planpal.infra.domain.oauth.OauthLoginParams;
+import com.gdg.planpal.infra.domain.oauth.RequestOauthInfoService;
 import com.gdg.planpal.domain.auth.dto.Tokens;
 import com.gdg.planpal.domain.auth.util.OauthTokenGenerator;
 import com.gdg.planpal.domain.user.dao.UserRepository;

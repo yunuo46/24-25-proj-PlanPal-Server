@@ -1,8 +1,8 @@
-package com.gdg.planpal.infra.oauth.google;
+package com.gdg.planpal.infra.domain.oauth.google;
 
-import com.gdg.planpal.infra.oauth.OauthApiClient;
-import com.gdg.planpal.infra.oauth.OauthInfoResponse;
-import com.gdg.planpal.infra.oauth.OauthProvider;
+import com.gdg.planpal.infra.domain.oauth.OauthApiClient;
+import com.gdg.planpal.infra.domain.oauth.OauthInfoResponse;
+import com.gdg.planpal.infra.domain.oauth.OauthProvider;
 import org.springframework.beans.factory.annotation.Value;
 import lombok.*;
 import org.springframework.http.*;
