@@ -9,7 +9,7 @@ steps:
     args:
       - '-c'
       - |
-        echo "$SECRET_ENV" > src/main/resources/application.yml
+        echo "$$SECRET_ENV" > src/main/resources/application.yml
     secretEnv: ['SECRET_ENV']
 
   # Docker Build
