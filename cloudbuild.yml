@@ -36,7 +36,7 @@ steps:
         "deploy",
         "planpal-server",
         "--image",
-        "asia-northeast3-docker.pkg.dev/gen-lang-client-0798322573/planpal-server/planpal-server:$SHORT_SHA",
+        "asia-northeast3-docker.pkg.dev/gen-lang-client-0798322573/planpal-server/planpal-server:latest",
         "--region",
         "asia-northeast3",
         "--platform",
