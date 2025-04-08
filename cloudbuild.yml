@@ -31,7 +31,7 @@ steps:
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: 'gcloud'
     args: ['compute', 'instances',
-           'update-container', 'planpal-vm',
+           'update-container', 'instance-20250408-planpal',
            '--container-image',
            'asia-northeast3-docker.pkg.dev/gen-lang-client-0798322573/planpal-server/planpal',
            '--zone', 'asia-northeast3-c']
