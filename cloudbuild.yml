@@ -1,15 +1,22 @@
 availableSecrets:
   secretManager:
-    - versionName: projects/772190012442/secrets/APPLICATION/versions/latest
+    - versionName: projects/$PROJECT_ID/secrets/APPLICATION/versions/latest
       env: SECRET_ENV
 
 steps:
+  - name: 'ubuntu'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        echo "$SECRET_ENV" > src/main/resources/application.yml
+    secretEnv: ['SECRET_ENV']
+
   # Docker Build
   - name: 'gcr.io/cloud-builders/docker'
     args: ['build', '-t',
            'asia-northeast3-docker.pkg.dev/gen-lang-client-0798322573/planpal-repo/planpal',
            '.']
-    secretEnv: [ 'SECRET_ENV' ]
 
   # Docker Push
   - name: 'gcr.io/cloud-builders/docker'
