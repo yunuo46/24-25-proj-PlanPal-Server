@@ -1,3 +1,8 @@
+availableSecrets:
+  secretManager:
+    - versionName: projects/772190012442/secrets/APPLICATION/versions/latest
+      env: SECRET_ENV
+
 steps:
   - name: 'ubuntu'
     entrypoint: 'bash'
@@ -29,11 +34,6 @@ steps:
     env:
       - 'CLOUDSDK_COMPUTE_REGION=asia-northeast3'
       - 'CLOUDSDK_COMPUTE_ZONE=asia-northeast3-c'
-
-availableSecrets:
-  secretManager:
-    - versionName: projects/772190012442/secrets/APPLICATION/versions/latest
-      env: SECRET_ENV
 
 options:
   logging: CLOUD_LOGGING_ONLY
