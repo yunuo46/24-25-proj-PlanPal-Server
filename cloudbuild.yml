@@ -15,13 +15,13 @@ steps:
   # Docker Build
   - name: 'gcr.io/cloud-builders/docker'
     args: ['build', '-t',
-           'asia-northeast3-docker.pkg.dev/gen-lang-client-0798322573/planpal-repo/planpal',
+           'asia-northeast3-docker.pkg.dev/gen-lang-client-0798322573/planpal-server/planpal',
            '.']
 
   # Docker Push
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push',
-           'asia-northeast3-docker.pkg.dev/gen-lang-client-0798322573/planpal-repo/planpal']
+           'asia-northeast3-docker.pkg.dev/gen-lang-client-0798322573/planpal-server/planpal']
 
   # 기존 VM에 컨테이너 업데이트
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
@@ -29,7 +29,7 @@ steps:
     args: ['compute', 'instances',
            'update-container', 'planpal-vm',
            '--container-image',
-           'asia-northeast3-docker.pkg.dev/gen-lang-client-0798322573/planpal-repo/planpal',
+           'asia-northeast3-docker.pkg.dev/gen-lang-client-0798322573/planpal-server/planpal',
            '--zone', 'asia-northeast3-c']
     env:
       - 'CLOUDSDK_COMPUTE_REGION=asia-northeast3'
