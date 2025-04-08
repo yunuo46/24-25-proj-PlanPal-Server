@@ -22,6 +22,7 @@ public class AuthApi {
 
     @PostMapping("/google")
     public ResponseEntity<?> loginGoogle(@RequestBody GoogleLoginParams params, HttpServletResponse response) {
+        System.out.println("loginGoogle api call");
         Tokens tokens = oauthLoginService.login(params);
         System.out.println("login google finished");
         TokenResponse tokenResponseDto = JwtUtil.setJwtResponse(response, tokens);
