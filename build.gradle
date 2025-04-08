@@ -13,6 +13,10 @@ java {
 	}
 }
 
+jar {
+	archiveBaseName.set('app')
+}
+
 configurations {
 	compileOnly {
 		extendsFrom annotationProcessor
