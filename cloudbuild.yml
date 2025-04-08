@@ -1,6 +1,6 @@
 availableSecrets:
   secretManager:
-    - versionName: projects/gen-lang-client-0798322573/secrets/APPLICATION/versions/latest
+    - versionName: projects/772190012442/secrets/APPLICATION
       env: SECRET_ENV
 
 steps:
