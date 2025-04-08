@@ -12,6 +12,10 @@ steps:
         echo "$$SECRET_ENV" > src/main/resources/application.yml
     secretEnv: ['SECRET_ENV']
 
+  # Gradle Build
+  - name: 'gcr.io/cloud-builders/gradle'
+    args: [ 'build' ]
+
   # Docker Build
   - name: 'gcr.io/cloud-builders/docker'
     args: ['build', '-t',
