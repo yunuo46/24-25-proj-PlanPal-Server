@@ -1,6 +1,6 @@
 availableSecrets:
   secretManager:
-    - versionName: projects/772190012442/secrets/APPLICATION
+    - versionName: projects/772190012442/secrets/APPLICATION/versions/latest
       env: SECRET_ENV
 
 steps:
