@@ -39,9 +39,9 @@ steps:
         "asia-northeast3-docker.pkg.dev/gen-lang-client-0798322573/planpal-server/planpal-server:$SHORT_SHA",
         "--region",
         "asia-northeast3",
-        "—platform",
+        "--platform",
         "managed",
-        "—allow-unauthenticated",
+        "--allow-unauthenticated",
       ]
 
 options:
