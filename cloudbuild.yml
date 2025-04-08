@@ -1,9 +1,15 @@
+availableSecrets:
+  secretManager:
+    - versionName: projects/gen-lang-client-0798322573/secrets/APPLICATION/versions/latest
+      env: SECRET_ENV
+
 steps:
   # Docker Build
   - name: 'gcr.io/cloud-builders/docker'
     args: ['build', '-t',
            'asia-northeast3-docker.pkg.dev/gen-lang-client-0798322573/planpal-repo/planpal',
            '.']
+    secretEnv: [ 'SECRET_ENV' ]
 
   # Docker Push
   - name: 'gcr.io/cloud-builders/docker'
@@ -13,7 +19,6 @@ steps:
   # 기존 VM에 컨테이너 업데이트
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: 'gcloud'
-    timeout: 240s
     args: ['compute', 'instances',
            'update-container', 'planpal-vm',
            '--container-image',
