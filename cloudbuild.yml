@@ -27,20 +27,25 @@ steps:
     args: ['push',
            'asia-northeast3-docker.pkg.dev/gen-lang-client-0798322573/planpal-server/planpal']
 
-  # 기존 VM에 컨테이너 업데이트
-  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-    entrypoint: 'gcloud'
-    args: ['compute', 'instances',
-           'update-container', 'instance-20250408-planpal',
-           '--container-image',
-           'asia-northeast3-docker.pkg.dev/gen-lang-client-0798322573/planpal-server/planpal',
-           '--zone', 'asia-northeast3-c']
-    env:
-      - 'CLOUDSDK_COMPUTE_REGION=asia-northeast3'
-      - 'CLOUDSDK_COMPUTE_ZONE=asia-northeast3-c'
+  # Deploy to Cloud run
+  - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
+    entrypoint: gcloud
+    args:
+      [
+        "run",
+        "deploy",
+        "planpal-client",
+        "--image",
+        "asia-northeast3-docker.pkg.dev/gen-lang-client-0798322573/planpal-server/planpal:$SHORT_SHA",
+        "--region",
+        "asia-northeast3",
+        "—platform",
+        "managed",
+        "—allow-unauthenticated",
+      ]
 
 options:
   logging: CLOUD_LOGGING_ONLY
 
 images:
-  - 'asia-northeast3-docker.pkg.dev/gen-lang-client-0798322573/planpal-repo/planpal'
+  - 'asia-northeast3-docker.pkg.dev/gen-lang-client-0798322573/planpal-server/planpal'
