@@ -13,8 +13,8 @@ import java.util.List;
 
 @OpenAPIDefinition(
         servers = {
-                @Server(url = "https://planpal-server-772190012442.asia-northeast3.run.app", description = "개발 서버"),
-                @Server(url = "http://localhost:8080", description = "로컬 서버")
+                @Server(url = "https://planpal-server-remote-772190012442.asia-northeast3.run.app", description = "리모트 서버"),
+                @Server(url = "https://planpal-server-local-772190012442.asia-northeast3.run.app", description = "로컬 서버")
         })
 @Configuration
 @RequiredArgsConstructor
