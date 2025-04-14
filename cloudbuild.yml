@@ -1,46 +1,72 @@
 availableSecrets:
   secretManager:
     - versionName: projects/772190012442/secrets/APPLICATION/versions/latest
-      env: SECRET_ENV
+      env: SECRET_ENV_LOCAL
+    - versionName: projects/772190012442/secrets/APPLICATION-REMOTE/versions/latest
+      env: SECRET_ENV_REMOTE
 
 steps:
+  # 🔹 1. LOCAL 서비스용 secret 파일 생성 + 빌드 + 배포
   - name: 'ubuntu'
     entrypoint: 'bash'
     args:
       - '-c'
       - |
-        echo "$$SECRET_ENV" > src/main/resources/secret.yml
-    secretEnv: ['SECRET_ENV']
+        echo "$$SECRET_ENV_LOCAL" > src/main/resources/secret.yml
+    secretEnv: ['SECRET_ENV_LOCAL']
 
-  # Gradle Build
   - name: gradle:7.6-jdk17
     args: [ 'gradle','build' ]
 
-  # Docker Build
   - name: 'gcr.io/cloud-builders/docker'
     args: ['build', '-t',
-           'asia-northeast3-docker.pkg.dev/gen-lang-client-0798322573/planpal-server/planpal-server',
+           'asia-northeast3-docker.pkg.dev/gen-lang-client-0798322573/planpal-server/planpal-local',
            '.']
 
-  # Docker Push
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push',
-           'asia-northeast3-docker.pkg.dev/gen-lang-client-0798322573/planpal-server/planpal-server']
+           'asia-northeast3-docker.pkg.dev/gen-lang-client-0798322573/planpal-server/planpal-local']
 
-  # Deploy to Cloud run
   - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
     entrypoint: gcloud
     args:
       [
-        "run",
-        "deploy",
-        "planpal-server",
-        "--image",
-        "asia-northeast3-docker.pkg.dev/gen-lang-client-0798322573/planpal-server/planpal-server:latest",
-        "--region",
-        "asia-northeast3",
-        "--platform",
-        "managed",
+        "run", "deploy", "planpal-server-local",
+        "--image", "asia-northeast3-docker.pkg.dev/gen-lang-client-0798322573/planpal-server/planpal-local",
+        "--region", "asia-northeast3",
+        "--platform", "managed",
+        "--allow-unauthenticated",
+      ]
+
+  # 🔹 2. REMOTE 서비스용 secret 파일 생성 + 빌드 + 배포
+  - name: 'ubuntu'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        echo "$$SECRET_ENV_REMOTE" > src/main/resources/secret.yml
+    secretEnv: ['SECRET_ENV_REMOTE']
+
+  - name: gradle:7.6-jdk17
+    args: [ 'gradle','build' ]
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t',
+           'asia-northeast3-docker.pkg.dev/gen-lang-client-0798322573/planpal-server/planpal-remote',
+           '.']
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push',
+           'asia-northeast3-docker.pkg.dev/gen-lang-client-0798322573/planpal-server/planpal-remote']
+
+  - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
+    entrypoint: gcloud
+    args:
+      [
+        "run", "deploy", "planpal-server-remote",
+        "--image", "asia-northeast3-docker.pkg.dev/gen-lang-client-0798322573/planpal-server/planpal-remote",
+        "--region", "asia-northeast3",
+        "--platform", "managed",
         "--allow-unauthenticated",
       ]
 
@@ -48,4 +74,5 @@ options:
   logging: CLOUD_LOGGING_ONLY
 
 images:
-  - 'asia-northeast3-docker.pkg.dev/gen-lang-client-0798322573/planpal-server/planpal-server'
+  - 'asia-northeast3-docker.pkg.dev/gen-lang-client-0798322573/planpal-server/planpal-local'
+  - 'asia-northeast3-docker.pkg.dev/gen-lang-client-0798322573/planpal-server/planpal-remote'
