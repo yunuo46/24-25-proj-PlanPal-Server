@@ -9,7 +9,7 @@ steps:
     args:
       - '-c'
       - |
-        echo "$$SECRET_ENV" > src/main/resources/application.yml
+        echo "$$SECRET_ENV" > src/main/resources/secret.yml
     secretEnv: ['SECRET_ENV']
 
   # Gradle Build
