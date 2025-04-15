@@ -1,5 +1,6 @@
 package com.gdg.planpal.domain.auth.application;
 
+import com.gdg.planpal.domain.user.dto.UserClaim;
 import com.gdg.planpal.infra.domain.oauth.OauthInfoResponse;
 import com.gdg.planpal.infra.domain.oauth.OauthLoginParams;
 import com.gdg.planpal.infra.domain.oauth.RequestOauthInfoService;
@@ -19,21 +20,18 @@ public class OauthLoginService {
 
     public Tokens login(OauthLoginParams params) {
         OauthInfoResponse oauthInfoResponse = requestOauthInfoService.request(params);
-        Long memberId = findOrCreateMember(oauthInfoResponse);
-        return oauthTokensGenerator.generate(memberId);
+        User user = findOrCreateMember(oauthInfoResponse);
+        UserClaim userClaim = UserClaim.of(user);
+        return oauthTokensGenerator.generate(user.getId(), userClaim);
     }
 
-    private Long findOrCreateMember(OauthInfoResponse oauthInfoResponse) {
+    private User findOrCreateMember(OauthInfoResponse oauthInfoResponse) {
         return userRepository.findByEmail(oauthInfoResponse.getEmail())
-                .map(User::getId)
                 .orElseGet(() -> newMember(oauthInfoResponse));
     }
 
-    private Long newMember(OauthInfoResponse oauthInfoResponse) {
-        User user = User.of(oauthInfoResponse.getName(),
-                oauthInfoResponse.getEmail(),
-                oauthInfoResponse.getOauthProvider(),
-                oauthInfoResponse.getProfileImageUrl());
-        return userRepository.save(user).getId();
+    private User newMember(OauthInfoResponse oauthInfoResponse) {
+        User user = User.of(oauthInfoResponse);
+        return userRepository.save(user);
     }
 }

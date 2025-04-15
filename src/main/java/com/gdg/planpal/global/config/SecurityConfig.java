@@ -43,7 +43,7 @@ public class SecurityConfig {
 
                 .authorizeHttpRequests((registry) ->
                         registry
-                                .requestMatchers("/api/**").permitAll()
+                                .requestMatchers("/api/**","/oauth/**").permitAll()
                                 .requestMatchers("/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**", "/swagger-resources/**", "/webjars/**").permitAll()
                                 .requestMatchers("/index.html").permitAll() // local test
                                 .anyRequest().authenticated()

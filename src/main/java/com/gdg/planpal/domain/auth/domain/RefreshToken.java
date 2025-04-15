@@ -15,14 +15,18 @@ public class RefreshToken {
 
     @Id
     @Column(name = "rt_key")
-    private Long key;
+    private String key;
 
     @Column(name = "rt_value")
     private String value;
 
     @Builder
-    public RefreshToken(Long key, String value) {
+    public RefreshToken(String key, String value) {
         this.key = key;
         this.value = value;
+    }
+
+    public void updateValue(String newValue) {
+        this.value = newValue;
     }
 }

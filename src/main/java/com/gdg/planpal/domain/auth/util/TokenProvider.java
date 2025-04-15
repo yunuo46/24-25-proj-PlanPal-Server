@@ -1,6 +1,8 @@
 package com.gdg.planpal.domain.auth.util;
 
 import com.gdg.planpal.domain.auth.dto.Tokens;
+import com.gdg.planpal.domain.user.dto.UserClaim;
+import com.gdg.planpal.infra.domain.oauth.OauthInfoResponse;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -37,12 +39,11 @@ public class TokenProvider {
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public Tokens generateTokenDto(Authentication authentication) {
+    public Tokens generateTokenDto(Authentication authentication, UserClaim userClaim) {
         // 권한들 가져오기
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
-
         long now = (new Date()).getTime();
 
         // Access Token 생성
@@ -50,6 +51,10 @@ public class TokenProvider {
         String accessToken = Jwts.builder()
                 .subject(authentication.getName())
                 .claim(AUTHORITIES_KEY, authorities)
+                .claim("email", userClaim.getEmail())
+                .claim("name", userClaim.getName())
+                .claim("provider",userClaim.getOauthProvider())
+                .claim("imageUrl", userClaim.getProfileImageUrl())
                 .expiration(accessTokenExpiresIn)
                 .signWith(key)
                 .compact();

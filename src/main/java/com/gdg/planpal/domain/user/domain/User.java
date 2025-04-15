@@ -1,5 +1,6 @@
 package com.gdg.planpal.domain.user.domain;
 
+import com.gdg.planpal.infra.domain.oauth.OauthInfoResponse;
 import com.gdg.planpal.infra.domain.oauth.OauthProvider;
 import jakarta.persistence.*;
 import lombok.*;
@@ -31,6 +32,15 @@ public class User {
                 .email(email)
                 .oauthProvider(provider)
                 .profileImageUrl(profileImageUrl)
+                .build();
+    }
+
+    public static User of(OauthInfoResponse oauthInfoResponse) {
+        return User.builder()
+                .name(oauthInfoResponse.getName())
+                .email(oauthInfoResponse.getEmail())
+                .oauthProvider(oauthInfoResponse.getOauthProvider())
+                .profileImageUrl(oauthInfoResponse.getProfileImageUrl())
                 .build();
     }
 }
