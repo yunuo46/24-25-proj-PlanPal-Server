@@ -21,15 +21,15 @@ public class AuthApi {
     private final TokenService tokenService;
 
     @PostMapping("/reissue")
-    public ResponseEntity<?> reissue(@CookieValue(name = "refreshToken") String refreshToken, HttpServletResponse response) {
+    public ResponseEntity<?> reissue(@CookieValue(name = "refreshToken") String refreshToken) {
         Tokens newTokens = tokenService.reissue(refreshToken);
 
-        TokenResponse tokenResponse = JwtUtil.setJwtResponse(newTokens);
-        return ResponseEntity.ok(tokenResponse);
+        TokenResponse tokenResponseDto = JwtUtil.setJwtResponse(newTokens);
+        return ResponseEntity.ok(tokenResponseDto);
     }
 
     @PostMapping("/google")
-    public ResponseEntity<?> loginGoogle(@RequestBody GoogleLoginParams params, HttpServletResponse response) {
+    public ResponseEntity<?> loginGoogle(@RequestBody GoogleLoginParams params) {
         System.out.println("loginGoogle api call");
         Tokens tokens = oauthLoginService.login(params);
         System.out.println("login google finished");
