@@ -23,7 +23,7 @@ public class AuthApi {
     public ResponseEntity<?> reissue(@CookieValue(name = "refreshToken") String refreshToken, HttpServletResponse response) {
         Tokens newTokens = tokenService.reissue(refreshToken);
 
-        TokenResponse tokenResponse = JwtUtil.setJwtResponse(response, newTokens);
+        TokenResponse tokenResponse = JwtUtil.setJwtResponse(newTokens);
         return ResponseEntity.ok(tokenResponse);
     }
 
@@ -32,7 +32,7 @@ public class AuthApi {
         System.out.println("loginGoogle api call");
         Tokens tokens = oauthLoginService.login(params);
         System.out.println("login google finished");
-        TokenResponse tokenResponseDto = JwtUtil.setJwtResponse(response, tokens);
+        TokenResponse tokenResponseDto = JwtUtil.setJwtResponse(tokens);
         return ResponseEntity.ok(tokenResponseDto);
     }
 }

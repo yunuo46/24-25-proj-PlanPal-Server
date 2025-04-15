@@ -20,14 +20,19 @@ public class TokenService {
             throw new RuntimeException("유효하지 않은 Refresh Token입니다.");
         }
 
-        RefreshToken tokenInDb = refreshTokenRepository.findByValue(refreshToken)
+        RefreshToken oldRefreshToken = refreshTokenRepository.findByValue(refreshToken)
                 .orElseThrow(() -> new RuntimeException("DB에 존재하지 않는 Refresh Token입니다."));
 
-        Authentication authentication = tokenProvider.getAuthentication(tokenInDb.getKey());
+        Authentication authentication = tokenProvider.getAuthentication(oldRefreshToken.getKey());
         Tokens newTokens = tokenProvider.generateTokenDto(authentication);
 
-        tokenInDb.updateValue(newTokens.getRefreshToken());
-        refreshTokenRepository.save(tokenInDb);
+        refreshTokenRepository.delete(oldRefreshToken);
+
+        RefreshToken newRefreshToken = RefreshToken.builder()
+                .key(authentication.getName())
+                .value(newTokens.getRefreshToken())
+                .build();
+        refreshTokenRepository.save(newRefreshToken);
 
         return newTokens;
     }
