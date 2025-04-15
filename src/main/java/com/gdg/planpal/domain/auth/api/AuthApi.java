@@ -9,6 +9,7 @@ import com.gdg.planpal.infra.domain.oauth.google.GoogleLoginParams;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -34,5 +35,15 @@ public class AuthApi {
         System.out.println("login google finished");
         TokenResponse tokenResponseDto = JwtUtil.setJwtResponse(tokens);
         return ResponseEntity.ok(tokenResponseDto);
+    }
+
+    @GetMapping("/test")
+    public void getCurrentUser(Authentication authentication) {
+        System.out.println("이름 (getName): " + authentication.getName());
+        System.out.println("주체 (getPrincipal): " + authentication.getPrincipal());
+        System.out.println("권한 목록:");
+        authentication.getAuthorities().forEach(a -> System.out.println(" - " + a.getAuthority()));
+        System.out.println("상세 정보 (getDetails): " + authentication.getDetails());
+        System.out.println("인증 여부 (isAuthenticated): " + authentication.isAuthenticated());
     }
 }

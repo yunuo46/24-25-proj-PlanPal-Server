@@ -32,6 +32,7 @@ public class TokenService {
                 .key(authentication.getName())
                 .value(newTokens.getRefreshToken())
                 .build();
+
         refreshTokenRepository.save(newRefreshToken);
 
         return newTokens;
