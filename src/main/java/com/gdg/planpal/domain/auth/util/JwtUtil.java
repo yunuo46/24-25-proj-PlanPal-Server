@@ -23,6 +23,7 @@ public class JwtUtil {
                 .grantType(tokenDto.getGrantType())
                 .accessToken(tokenDto.getAccessToken())
                 .accessTokenExpiresIn(tokenDto.getAccessTokenExpiresIn())
+                .refreshToken(tokenDto.getRefreshToken())
                 .refreshTokenExpiresIn(tokenDto.getRefreshTokenExpiresIn())
                 .build();
 
