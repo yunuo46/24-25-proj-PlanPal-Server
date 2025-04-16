@@ -22,12 +22,8 @@ public class AuthApi {
     private final TokenService tokenService;
 
     @PostMapping("/reissue")
-    public ResponseEntity<?> reissue(@CookieValue(name = "refreshToken", required = false) String refreshToken,
+    public ResponseEntity<?> reissue(@CookieValue(name = "refreshToken") String refreshToken,
                                      HttpServletResponse response) {
-
-        System.out.println("==== reissue 요청 ====");
-        System.out.println("refreshToken: " + refreshToken);
-
         Tokens newTokens = tokenService.reissue(refreshToken);
 
         TokenReissueResponse tokenResponseDto = JwtUtil.setReissueJwtResponse(newTokens, response);
