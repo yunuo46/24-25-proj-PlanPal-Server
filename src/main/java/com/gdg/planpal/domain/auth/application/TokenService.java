@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
 public class TokenService {
 
     private final RefreshTokenRepository refreshTokenRepository;
@@ -23,6 +22,7 @@ public class TokenService {
     private final OauthTokenGenerator oauthTokenGenerator;
     private final UserRepository userRepository;
 
+    @Transactional
     public Tokens reissue(String refreshToken) {
         if (!tokenProvider.validateToken(refreshToken)) {
             throw new RuntimeException("유효하지 않은 Refresh Token입니다.");
@@ -41,5 +41,12 @@ public class TokenService {
         refreshTokenEntity.updateValue(newTokens.getRefreshToken());
 
         return newTokens;
+    }
+
+    public void deleteRefreshToken(String refreshToken) {
+        if (!tokenProvider.validateToken(refreshToken)) {
+            throw new IllegalArgumentException("유효하지 않은 토큰입니다.");
+        }
+        refreshTokenRepository.deleteByValue(refreshToken);
     }
 }

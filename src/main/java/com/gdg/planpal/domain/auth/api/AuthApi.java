@@ -37,13 +37,9 @@ public class AuthApi {
         return ResponseEntity.ok(tokenResponseDto);
     }
 
-    @GetMapping("/test")
-    public void getCurrentUser(Authentication authentication) {
-        System.out.println("이름 (getName): " + authentication.getName());
-        System.out.println("주체 (getPrincipal): " + authentication.getPrincipal());
-        System.out.println("권한 목록:");
-        authentication.getAuthorities().forEach(a -> System.out.println(" - " + a.getAuthority()));
-        System.out.println("상세 정보 (getDetails): " + authentication.getDetails());
-        System.out.println("인증 여부 (isAuthenticated): " + authentication.isAuthenticated());
+    @DeleteMapping("/logout")
+    public ResponseEntity<?> logout(@CookieValue(name = "refreshToken") String refreshToken) {
+        tokenService.deleteRefreshToken(refreshToken);
+        return ResponseEntity.ok().build();
     }
 }
