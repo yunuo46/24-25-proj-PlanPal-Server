@@ -13,6 +13,4 @@ public class TokenResponse {
     private String grantType;
     private String accessToken;
     private Long accessTokenExpiresIn;
-    private String refreshToken;
-    private Long refreshTokenExpiresIn;
 }

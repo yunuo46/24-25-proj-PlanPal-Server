@@ -1,7 +1,6 @@
 package com.gdg.planpal.domain.auth.util;
 
 import com.gdg.planpal.domain.auth.dto.Tokens;
-import com.gdg.planpal.domain.auth.dto.response.TokenReissueResponse;
 import com.gdg.planpal.domain.auth.dto.response.TokenResponse;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
@@ -18,27 +17,14 @@ public class JwtUtil {
         response.addCookie(cookie);
     }
 
-    public static TokenReissueResponse setReissueJwtResponse(Tokens tokenDto, HttpServletResponse response) {
-        TokenReissueResponse tokenResponseDto = TokenReissueResponse.builder()
+    public static TokenResponse setJwtResponse(HttpServletResponse response, Tokens tokenDto) {
+        TokenResponse tokenResponseDto = TokenResponse.builder()
                 .grantType(tokenDto.getGrantType())
                 .accessToken(tokenDto.getAccessToken())
                 .accessTokenExpiresIn(tokenDto.getAccessTokenExpiresIn())
                 .build();
 
         setRefreshTokenInCookie(response, tokenDto.getRefreshToken());
-        return tokenResponseDto;
-    }
-
-    public static TokenResponse setJwtResponse(Tokens tokenDto) {
-        TokenResponse tokenResponseDto = TokenResponse.builder()
-                .grantType(tokenDto.getGrantType())
-                .accessToken(tokenDto.getAccessToken())
-                .accessTokenExpiresIn(tokenDto.getAccessTokenExpiresIn())
-                .refreshToken(tokenDto.getRefreshToken())
-                .refreshTokenExpiresIn(tokenDto.getRefreshTokenExpiresIn())
-                .build();
-
-        //setRefreshTokenInCookie(response, tokenDto.getRefreshToken());
         return tokenResponseDto;
     }
 
