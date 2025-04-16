@@ -3,6 +3,7 @@ package com.gdg.planpal.domain.auth.api;
 import com.gdg.planpal.domain.auth.application.OauthLoginService;
 import com.gdg.planpal.domain.auth.application.TokenService;
 import com.gdg.planpal.domain.auth.dto.Tokens;
+import com.gdg.planpal.domain.auth.dto.response.TokenReissueResponse;
 import com.gdg.planpal.domain.auth.dto.response.TokenResponse;
 import com.gdg.planpal.domain.auth.util.JwtUtil;
 import com.gdg.planpal.infra.domain.oauth.google.GoogleLoginParams;
@@ -21,11 +22,15 @@ public class AuthApi {
     private final TokenService tokenService;
 
     @PostMapping("/reissue")
-    public ResponseEntity<?> reissue(@CookieValue(name = "refreshToken") String refreshToken, HttpServletResponse response) {
-        System.out.println(refreshToken); // test
+    public ResponseEntity<?> reissue(@CookieValue(name = "refreshToken", required = false) String refreshToken,
+                                     HttpServletResponse response) {
+
+        System.out.println("==== reissue 요청 ====");
+        System.out.println("refreshToken: " + refreshToken);
+
         Tokens newTokens = tokenService.reissue(refreshToken);
-        System.out.println(newTokens.getRefreshToken()); // test
-        TokenResponse tokenResponseDto = JwtUtil.setReissueJwtResponse(newTokens, response);
+
+        TokenReissueResponse tokenResponseDto = JwtUtil.setReissueJwtResponse(newTokens, response);
         return ResponseEntity.ok(tokenResponseDto);
     }
 

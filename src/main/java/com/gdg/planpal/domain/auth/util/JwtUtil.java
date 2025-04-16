@@ -1,6 +1,7 @@
 package com.gdg.planpal.domain.auth.util;
 
 import com.gdg.planpal.domain.auth.dto.Tokens;
+import com.gdg.planpal.domain.auth.dto.response.TokenReissueResponse;
 import com.gdg.planpal.domain.auth.dto.response.TokenResponse;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
@@ -17,8 +18,8 @@ public class JwtUtil {
         response.addCookie(cookie);
     }
 
-    public static TokenResponse setReissueJwtResponse(Tokens tokenDto, HttpServletResponse response) {
-        TokenResponse tokenResponseDto = TokenResponse.builder()
+    public static TokenReissueResponse setReissueJwtResponse(Tokens tokenDto, HttpServletResponse response) {
+        TokenReissueResponse tokenResponseDto = TokenReissueResponse.builder()
                 .grantType(tokenDto.getGrantType())
                 .accessToken(tokenDto.getAccessToken())
                 .accessTokenExpiresIn(tokenDto.getAccessTokenExpiresIn())
