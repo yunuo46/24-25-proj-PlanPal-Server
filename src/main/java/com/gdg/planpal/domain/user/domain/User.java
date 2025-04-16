@@ -26,15 +26,6 @@ public class User {
 
     private String profileImageUrl;
 
-    public static User of(String name, String email, OauthProvider provider, String profileImageUrl) {
-        return User.builder()
-                .name(name)
-                .email(email)
-                .oauthProvider(provider)
-                .profileImageUrl(profileImageUrl)
-                .build();
-    }
-
     public static User of(OauthInfoResponse oauthInfoResponse) {
         return User.builder()
                 .name(oauthInfoResponse.getName())
