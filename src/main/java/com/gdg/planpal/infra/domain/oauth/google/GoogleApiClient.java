@@ -57,9 +57,7 @@ public class GoogleApiClient implements OauthApiClient {
         HttpEntity<?> request = new HttpEntity<>(body, httpHeaders);
         GoogleTokens response = restTemplate.postForObject(url, request, GoogleTokens.class);
 
-        System.out.println("request access token: " + Objects.requireNonNull(response).getAccessToken());
-
-        return response.getAccessToken();
+        return Objects.requireNonNull(response).getAccessToken();
     }
 
 

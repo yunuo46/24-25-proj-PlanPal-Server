@@ -1,8 +1,8 @@
 package com.gdg.planpal.domain.auth.util;
 
 import com.gdg.planpal.domain.auth.dto.Tokens;
+import com.gdg.planpal.domain.user.domain.User;
 import com.gdg.planpal.domain.user.dto.UserClaim;
-import com.gdg.planpal.infra.domain.oauth.OauthInfoResponse;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -12,8 +12,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
@@ -26,7 +24,6 @@ import java.util.stream.Collectors;
 @Slf4j
 @Component
 public class TokenProvider {
-
     private static final String AUTHORITIES_KEY = "auth";
     private static final String BEARER_TYPE = "Bearer";
     private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 5;         // 5분
@@ -59,6 +56,8 @@ public class TokenProvider {
                 .signWith(key)
                 .compact();
 
+        System.out.println(accessToken);
+
         // Refresh Token 생성
         String refreshToken = Jwts.builder()
                 .expiration(new Date(now + REFRESH_TOKEN_EXPIRE_TIME))
@@ -86,7 +85,7 @@ public class TokenProvider {
                         .map(SimpleGrantedAuthority::new)
                         .collect(Collectors.toList());
 
-        UserDetails principal = new User(claims.getSubject(), "", authorities);
+        Long principal = Long.valueOf(claims.getSubject());
         return new UsernamePasswordAuthenticationToken(principal, "", authorities);
     }
 
