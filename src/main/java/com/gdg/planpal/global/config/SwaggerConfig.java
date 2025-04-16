@@ -9,8 +9,6 @@ import org.springdoc.core.models.GroupedOpenApi;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.util.List;
-
 @OpenAPIDefinition(
         servers = {
                 @Server(url = "https://planpal-server-remote-772190012442.asia-northeast3.run.app", description = "리모트 서버"),
