@@ -33,13 +33,15 @@ public class AuthApi {
         System.out.println("loginGoogle api call");
         Tokens tokens = oauthLoginService.login(params);
         System.out.println("login google finished");
+
         TokenResponse tokenResponseDto = JwtUtil.setJwtResponse(response, tokens);
         return ResponseEntity.ok(tokenResponseDto);
     }
 
     @DeleteMapping("/logout")
-    public ResponseEntity<?> logout(@CookieValue(name = "refreshToken") String refreshToken) {
+    public ResponseEntity<?> logout(@CookieValue(name = "refreshToken") String refreshToken, HttpServletResponse response) {
         tokenService.deleteRefreshToken(refreshToken);
+        JwtUtil.deleteRefreshTokenInCookie(response);
         return ResponseEntity.ok().build();
     }
 }

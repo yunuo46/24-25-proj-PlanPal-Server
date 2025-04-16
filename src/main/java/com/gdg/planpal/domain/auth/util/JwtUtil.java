@@ -13,12 +13,20 @@ import java.time.Duration;
 public class JwtUtil {
 
     public static void setRefreshTokenInCookie(HttpServletResponse response, String refreshToken) {
-        ResponseCookie cookie = ResponseCookie.from("refreshToken", refreshToken)
+        setResponseCookie(response, refreshToken, Duration.ofDays(5));
+    }
+
+    public static void deleteRefreshTokenInCookie(HttpServletResponse response) {
+        setResponseCookie(response, "", Duration.ZERO);
+    }
+
+    private static void setResponseCookie(HttpServletResponse response, String value, Duration maxAge) {
+        ResponseCookie cookie = ResponseCookie.from("refreshToken", value)
                 .httpOnly(true)
                 .secure(true)
                 .sameSite("None")
                 .path("/")
-                .maxAge(Duration.ofDays(5))
+                .maxAge(maxAge)
                 .build();
         response.setHeader("Set-Cookie", cookie.toString());
     }
