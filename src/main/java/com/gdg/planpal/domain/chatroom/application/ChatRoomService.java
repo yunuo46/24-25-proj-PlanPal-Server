@@ -5,8 +5,10 @@ import com.gdg.planpal.domain.chatroom.dao.UserChatRoomRepository;
 import com.gdg.planpal.domain.chatroom.domain.ChatRoom;
 import com.gdg.planpal.domain.chatroom.domain.UserChatRoom;
 import com.gdg.planpal.domain.chatroom.dto.request.ChatRoomCreateRequest;
+import com.gdg.planpal.domain.chatroom.dto.request.ChatRoomJoinRequest;
 import com.gdg.planpal.domain.chatroom.dto.request.ChatRoomUpdateRequest;
 import com.gdg.planpal.domain.chatroom.dto.response.ChatRoomResponse;
+import com.gdg.planpal.domain.chatroom.dto.response.ChatRoomSummaryResponse;
 import com.gdg.planpal.domain.user.dao.UserRepository;
 import com.gdg.planpal.domain.user.domain.User;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +26,13 @@ public class ChatRoomService {
     private final ChatRoomRepository chatRoomRepository;
     private final UserChatRoomRepository userChatRoomRepository;
     private final UserRepository userRepository;
+
+    @Transactional(readOnly = true)
+    public List<ChatRoomSummaryResponse> getAllSummariesByUser(Long userId) {
+        return userChatRoomRepository.findAllByUserId(userId).stream()
+                .map(uc -> ChatRoomSummaryResponse.from(uc.getChatRoom()))
+                .collect(Collectors.toList());
+    }
 
     @Transactional
     public ChatRoomResponse create(ChatRoomCreateRequest request, Long userId) {
@@ -50,30 +59,9 @@ public class ChatRoomService {
         return ChatRoomResponse.from(chatRoom);
     }
 
-    @Transactional(readOnly = true)
-    public String getInviteCode(Long chatRoomId, Long userId) {
-        if (!userChatRoomRepository.existsByUserIdAndChatRoomId(userId, chatRoomId)) {
-            throw new SecurityException("채팅방에 참여 중인 유저만 초대 코드를 조회할 수 있습니다.");
-        }
-        return chatRoomRepository.findById(chatRoomId)
-                .map(ChatRoom::getInviteCode)
-                .orElseThrow(() -> new IllegalArgumentException("채팅방이 존재하지 않습니다."));
-    }
-
-    @Transactional(readOnly = true)
-    public List<ChatRoomResponse> findAllByUser(Long userId) {
-        return userChatRoomRepository.findAllByUserId(userId).stream()
-                .map(uc -> ChatRoomResponse.from(uc.getChatRoom()))
-                .collect(Collectors.toList());
-    }
-
-    private String generateInviteCode() {
-        return UUID.randomUUID().toString().substring(0, 8);
-    }
-
     @Transactional
-    public ChatRoomResponse joinChatRoom(String inviteCode, Long userId) {
-        ChatRoom chatRoom = chatRoomRepository.findByInviteCode(inviteCode)
+    public ChatRoomResponse joinChatRoom(ChatRoomJoinRequest request, Long userId) {
+        ChatRoom chatRoom = chatRoomRepository.findByInviteCode(request.getInviteCode())
                 .orElseThrow(() -> new IllegalArgumentException("잘못된 초대 코드입니다."));
 
         User user = userRepository.findById(userId)
@@ -88,6 +76,16 @@ public class ChatRoomService {
             userChatRoomRepository.save(userChatRoom);
         }
         return ChatRoomResponse.from(chatRoom);
+    }
+
+    @Transactional(readOnly = true)
+    public ChatRoomResponse getChatRoom(Long chatRoomId, Long userId) {
+        if (!userChatRoomRepository.existsByUserIdAndChatRoomId(userId, chatRoomId)) {
+            throw new SecurityException("해당 채팅방에 참여 중인 유저만 조회할 수 있습니다.");
+        }
+        ChatRoom room = chatRoomRepository.findById(chatRoomId)
+                .orElseThrow(() -> new IllegalArgumentException("채팅방이 존재하지 않습니다."));
+        return ChatRoomResponse.from(room);
     }
 
     @Transactional
@@ -117,5 +115,19 @@ public class ChatRoomService {
             throw new IllegalStateException("채팅방 이름이 존재하지 않습니다.", e);
         }
         return ChatRoomResponse.from(room);
+    }
+
+    @Transactional(readOnly = true)
+    public String getInviteCode(Long chatRoomId, Long userId) {
+        if (!userChatRoomRepository.existsByUserIdAndChatRoomId(userId, chatRoomId)) {
+            throw new SecurityException("채팅방에 참여 중인 유저만 초대 코드를 조회할 수 있습니다.");
+        }
+        return chatRoomRepository.findById(chatRoomId)
+                .map(ChatRoom::getInviteCode)
+                .orElseThrow(() -> new IllegalArgumentException("채팅방이 존재하지 않습니다."));
+    }
+
+    private String generateInviteCode() {
+        return UUID.randomUUID().toString().substring(0, 8);
     }
 }
