@@ -1,5 +1,6 @@
 package com.gdg.planpal.domain.chatroom.domain;
 
+import com.gdg.planpal.domain.map.domain.Map;
 import com.gdg.planpal.domain.user.domain.User;
 import jakarta.persistence.*;
 import lombok.*;
@@ -42,6 +43,9 @@ public class ChatRoom {
 
     @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<UserChatRoom> userChatRooms = new ArrayList<>();
+
+    @OneToOne(mappedBy = "chatRoom")
+    private Map map;
 
     @PrePersist
     public void prePersist() {

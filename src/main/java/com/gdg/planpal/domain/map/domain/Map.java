@@ -1,33 +1,38 @@
 package com.gdg.planpal.domain.map.domain;
 
+import com.gdg.planpal.domain.chatroom.domain.ChatRoom;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
-public class MapPin {
+public class Map {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "map_id")
-    private Map map;
+    @OneToOne
+    @JoinColumn(name = "chat_room_id", unique = true)
+    private ChatRoom chatRoom;
 
     @Embedded
     @Column(nullable = false)
-    private Coordinates coordinates;
+    private Coordinates centorCoordinates;
 
-    private String content;
+    private Integer zoom;
 
-    @Enumerated(EnumType.STRING)
-    private IconType iconType;
+    private String mapId;
+
+    @OneToMany(mappedBy = "map", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<MapPin> pins = new ArrayList<>();
 
     private LocalDateTime createdAt;
 
@@ -36,4 +41,3 @@ public class MapPin {
         this.createdAt = LocalDateTime.now();
     }
 }
-
