@@ -4,7 +4,7 @@ import com.gdg.planpal.domain.map.dao.MapPinRepository;
 import com.gdg.planpal.domain.map.dao.MapRepository;
 import com.gdg.planpal.domain.map.domain.MapBoard;
 import com.gdg.planpal.domain.map.domain.pin.MapPin;
-import com.gdg.planpal.domain.map.domain.pin.factory.MapPinFactoryRouter;
+import com.gdg.planpal.domain.map.application.factory.MapPinFactoryRouter;
 import com.gdg.planpal.domain.map.dto.request.MapPinRequest;
 import com.gdg.planpal.domain.map.dto.response.MapResponse;
 import lombok.RequiredArgsConstructor;

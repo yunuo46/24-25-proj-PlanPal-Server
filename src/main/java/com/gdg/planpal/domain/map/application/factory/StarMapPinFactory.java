@@ -1,23 +1,23 @@
-package com.gdg.planpal.domain.map.domain.pin.factory;
+package com.gdg.planpal.domain.map.application.factory;
 
 import com.gdg.planpal.domain.map.domain.Coordinates;
 import com.gdg.planpal.domain.map.domain.IconType;
 import com.gdg.planpal.domain.map.domain.MapBoard;
-import com.gdg.planpal.domain.map.domain.pin.HeartMapPin;
 import com.gdg.planpal.domain.map.domain.pin.MapPin;
+import com.gdg.planpal.domain.map.domain.pin.StarMapPin;
 import com.gdg.planpal.domain.map.dto.request.MapPinRequest;
 import org.springframework.stereotype.Component;
 
 @Component
-public class HeartMapPinFactory implements MapPinFactory{
+public class StarMapPinFactory implements MapPinFactory{
     @Override
     public IconType mapPinType() {
-        return IconType.HEART;
+        return IconType.STAR;
     }
 
     @Override
     public MapPin create(MapBoard mapBoard, MapPinRequest request) {
-        return HeartMapPin.builder()
+        return StarMapPin.builder()
                 .mapBoard(mapBoard)
                 .coordinates(new Coordinates(request.lat(), request.lng()))
                 .placeId(request.placeId())

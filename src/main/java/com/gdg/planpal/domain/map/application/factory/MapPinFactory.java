@@ -1,4 +1,4 @@
-package com.gdg.planpal.domain.map.domain.pin.factory;
+package com.gdg.planpal.domain.map.application.factory;
 
 import com.gdg.planpal.domain.map.domain.IconType;
 import com.gdg.planpal.domain.map.domain.MapBoard;
