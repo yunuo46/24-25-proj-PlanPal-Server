@@ -55,7 +55,7 @@ class MapPinFactoryTest {
     void HeartPin_create_success() {
         // given
         MapPinRequest request = new MapPinRequest(
-                37.123, 127.456, "내용", IconType.HEART, "place-123"
+                37.123, 127.456, "내용", IconType.HEART, "place-123",null
         );
 
         // when
@@ -70,11 +70,12 @@ class MapPinFactoryTest {
     void StarPin_create_success() {
         // given
         List<ScheduleRequest> schedules = List.of(
-                new ScheduleRequest(1L, LocalDateTime.now(), LocalDateTime.now().plusHours(1))
+                new ScheduleRequest(LocalDateTime.now(), LocalDateTime.now().plusHours(1)),
+                new ScheduleRequest(LocalDateTime.now().plusHours(2),LocalDateTime.now().plusHours(3))
         );
 
         MapPinRequest request = new MapPinRequest(
-                37.123, 127.456, "스케줄 내용", IconType.STAR, "place-456"
+                37.123, 127.456, "스케줄 내용", IconType.STAR, "place-456",schedules
         );
 
         // when
@@ -83,5 +84,7 @@ class MapPinFactoryTest {
         // then
         List<MapPin> pins = mapPinRepository.findAll();
         assertThat(pins.getLast()).isInstanceOf(StarMapPin.class);
+        StarMapPin starMapPin = (StarMapPin) pins.getLast();
+        assertThat(starMapPin.getSchedules()).hasSize(2);
     }
 }

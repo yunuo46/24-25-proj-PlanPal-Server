@@ -3,10 +3,16 @@ package com.gdg.planpal.domain.map.domain.pin;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class StarMapPinSchedule {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
