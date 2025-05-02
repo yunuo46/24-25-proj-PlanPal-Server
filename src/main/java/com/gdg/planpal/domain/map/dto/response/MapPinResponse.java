@@ -1,6 +1,6 @@
 package com.gdg.planpal.domain.map.dto.response;
 
-import com.gdg.planpal.domain.map.domain.MapPin;
+import com.gdg.planpal.domain.map.domain.pin.MapPin;
 import com.gdg.planpal.domain.map.domain.IconType;
 
 public record MapPinResponse(

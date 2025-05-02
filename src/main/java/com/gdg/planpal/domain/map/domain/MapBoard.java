@@ -1,6 +1,7 @@
 package com.gdg.planpal.domain.map.domain;
 
 import com.gdg.planpal.domain.chatroom.domain.ChatRoom;
+import com.gdg.planpal.domain.map.domain.pin.MapPin;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -13,7 +14,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
-public class Map {
+public class MapBoard {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,7 +32,7 @@ public class Map {
 
     private String mapId;
 
-    @OneToMany(mappedBy = "map", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "mapBoard", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MapPin> pins = new ArrayList<>();
 
     private LocalDateTime createdAt;

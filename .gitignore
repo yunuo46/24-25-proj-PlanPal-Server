@@ -38,3 +38,4 @@ out/
 
 ### secret yml ###
 /src/main/resources/secret.yml
+/src/test/resources/application-test.yml
