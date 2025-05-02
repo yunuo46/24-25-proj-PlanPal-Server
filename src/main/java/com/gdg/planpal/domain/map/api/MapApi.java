@@ -10,11 +10,11 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/map")
+@RequestMapping("/api/maps")
 public class MapApi {
     private final MapService mapService;
 
-    @GetMapping("/{chatRoomId}")
+    @GetMapping("/chat-rooms/{chatRoomId}")
     @Operation(summary = "맵 정보 조회", description = "채팅방 ID로 해당 맵 정보를 조회합니다.")
     public ResponseEntity<MapResponse> getMapInfo(@PathVariable Long chatRoomId) {
         return ResponseEntity.ok(mapService.getMapInfo(chatRoomId));

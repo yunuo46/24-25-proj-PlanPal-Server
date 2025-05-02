@@ -1,6 +1,6 @@
-package com.gdg.planpal.domain.calendar.dao;
+package com.gdg.planpal.domain.schedule.dao;
 
-import com.gdg.planpal.domain.map.domain.pin.StarMapPinSchedule;
+import com.gdg.planpal.domain.schedule.domain.StarMapPinSchedule;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import java.util.List;

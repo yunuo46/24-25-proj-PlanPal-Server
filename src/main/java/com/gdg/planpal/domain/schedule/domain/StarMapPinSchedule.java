@@ -1,5 +1,6 @@
-package com.gdg.planpal.domain.map.domain.pin;
+package com.gdg.planpal.domain.schedule.domain;
 
+import com.gdg.planpal.domain.map.domain.pin.StarMapPin;
 import com.gdg.planpal.domain.map.dto.request.ScheduleRequest;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

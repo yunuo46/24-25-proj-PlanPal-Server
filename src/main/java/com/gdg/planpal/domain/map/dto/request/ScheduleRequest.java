@@ -1,7 +1,7 @@
 package com.gdg.planpal.domain.map.dto.request;
 
 import com.gdg.planpal.domain.map.domain.pin.StarMapPin;
-import com.gdg.planpal.domain.map.domain.pin.StarMapPinSchedule;
+import com.gdg.planpal.domain.schedule.domain.StarMapPinSchedule;
 import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDateTime;

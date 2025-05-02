@@ -5,7 +5,7 @@ import com.gdg.planpal.domain.map.dao.MapRepository;
 import com.gdg.planpal.domain.map.domain.Coordinates;
 import com.gdg.planpal.domain.map.domain.MapBoard;
 import com.gdg.planpal.domain.map.domain.pin.StarMapPin;
-import com.gdg.planpal.domain.map.domain.pin.StarMapPinSchedule;
+import com.gdg.planpal.domain.schedule.domain.StarMapPinSchedule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

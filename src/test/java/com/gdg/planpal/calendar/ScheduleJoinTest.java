@@ -1,12 +1,12 @@
 package com.gdg.planpal.calendar;
 
-import com.gdg.planpal.domain.calendar.dao.StarMapPinScheduleRepository;
+import com.gdg.planpal.domain.schedule.dao.StarMapPinScheduleRepository;
 import com.gdg.planpal.domain.map.dao.MapPinRepository;
 import com.gdg.planpal.domain.map.dao.MapRepository;
 import com.gdg.planpal.domain.map.domain.Coordinates;
 import com.gdg.planpal.domain.map.domain.MapBoard;
 import com.gdg.planpal.domain.map.domain.pin.StarMapPin;
-import com.gdg.planpal.domain.map.domain.pin.StarMapPinSchedule;
+import com.gdg.planpal.domain.schedule.domain.StarMapPinSchedule;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.hibernate.Session;

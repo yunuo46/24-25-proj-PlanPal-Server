@@ -1,6 +1,7 @@
 package com.gdg.planpal.domain.map.domain.pin;
 
 import com.gdg.planpal.domain.map.domain.IconType;
+import com.gdg.planpal.domain.schedule.domain.StarMapPinSchedule;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;

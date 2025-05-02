@@ -6,7 +6,7 @@ import com.gdg.planpal.domain.map.domain.MapBoard;
 import com.gdg.planpal.domain.map.domain.pin.HeartMapPin;
 import com.gdg.planpal.domain.map.domain.pin.MapPin;
 import com.gdg.planpal.domain.map.domain.pin.StarMapPin;
-import com.gdg.planpal.domain.map.domain.pin.StarMapPinSchedule;
+import com.gdg.planpal.domain.schedule.domain.StarMapPinSchedule;
 import com.gdg.planpal.domain.map.dto.request.MapPinRequest;
 import com.gdg.planpal.domain.map.dto.request.ScheduleRequest;
 import org.springframework.stereotype.Component;

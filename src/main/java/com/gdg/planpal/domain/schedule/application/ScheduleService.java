@@ -1,10 +1,11 @@
-package com.gdg.planpal.domain.calendar.application;
+package com.gdg.planpal.domain.schedule.application;
 
-import com.gdg.planpal.domain.calendar.dao.StarMapPinScheduleRepository;
+import com.gdg.planpal.domain.schedule.dao.StarMapPinScheduleRepository;
 import com.gdg.planpal.domain.map.application.factory.MapPinFactoryRouter;
 import com.gdg.planpal.domain.map.dao.MapPinRepository;
 import com.gdg.planpal.domain.map.domain.pin.*;
 import com.gdg.planpal.domain.map.dto.request.ScheduleRequest;
+import com.gdg.planpal.domain.schedule.domain.StarMapPinSchedule;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,7 +14,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class CalendarService {
+public class ScheduleService {
 
     private final StarMapPinScheduleRepository scheduleRepository;
     private final MapPinRepository mapPinRepository;
