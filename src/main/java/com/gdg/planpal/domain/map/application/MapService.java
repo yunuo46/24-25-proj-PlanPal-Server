@@ -19,7 +19,7 @@ public class MapService {
     private final MapPinFactoryRouter mapPinFactoryRouter;
 
     @Transactional(readOnly = true)
-    public MapResponse getMapByChatRoom(Long chatRoomId) {
+    public MapResponse getMapInfo(Long chatRoomId) {
         MapBoard mapBoard = mapRepository.findWithPinsByChatRoomId(chatRoomId)
                 .orElseThrow(() -> new IllegalArgumentException("Map not found for chatRoomId: " + chatRoomId));
         return MapResponse.from(mapBoard);

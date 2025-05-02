@@ -16,8 +16,8 @@ public class MapApi {
 
     @GetMapping("/{chatRoomId}")
     @Operation(summary = "맵 정보 조회", description = "채팅방 ID로 해당 맵 정보를 조회합니다.")
-    public ResponseEntity<MapResponse> getMapByChatRoom(@PathVariable Long chatRoomId) {
-        return ResponseEntity.ok(mapService.getMapByChatRoom(chatRoomId));
+    public ResponseEntity<MapResponse> getMapInfo(@PathVariable Long chatRoomId) {
+        return ResponseEntity.ok(mapService.getMapInfo(chatRoomId));
     }
 
     @PostMapping("/{mapId}/pins")
