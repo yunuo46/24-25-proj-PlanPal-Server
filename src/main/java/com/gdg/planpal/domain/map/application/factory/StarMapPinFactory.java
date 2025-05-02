@@ -7,6 +7,7 @@ import com.gdg.planpal.domain.map.domain.pin.MapPin;
 import com.gdg.planpal.domain.map.domain.pin.StarMapPin;
 import com.gdg.planpal.domain.map.domain.pin.StarMapPinSchedule;
 import com.gdg.planpal.domain.map.dto.request.MapPinRequest;
+import com.gdg.planpal.domain.map.dto.request.ScheduleRequest;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -36,5 +37,20 @@ public class StarMapPinFactory implements MapPinFactory{
 
         pin.getSchedules().addAll(schedules);
         return pin;
+    }
+
+    @Override
+    public MapPin addSchedule(MapPin pin, ScheduleRequest request) {
+        if (!(pin instanceof StarMapPin starPin)) {
+            throw new IllegalArgumentException("Expected StarMapPin");
+        }
+
+        starPin.getSchedules().add(StarMapPinSchedule.builder()
+                .mapPin(starPin)
+                .startTime(request.startTime())
+                .endTime(request.endTime())
+                .build());
+
+        return starPin;
     }
 }

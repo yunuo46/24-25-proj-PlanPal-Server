@@ -1,16 +1,19 @@
 package com.gdg.planpal.domain.map.domain.pin;
 
+import com.gdg.planpal.domain.map.dto.request.ScheduleRequest;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Builder
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 public class StarMapPinSchedule {
@@ -27,4 +30,9 @@ public class StarMapPinSchedule {
 
     @Column(nullable = false)
     private LocalDateTime endTime;
+
+    public void update(ScheduleRequest request) {
+        this.startTime = request.startTime();
+        this.endTime = request.endTime();
+    }
 }
