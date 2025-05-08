@@ -46,9 +46,7 @@ class ScheduleJoinTest {
     @BeforeEach
     void setup() {
         MapBoard map = mapRepository.save(MapBoard.builder()
-                .mapId("map2")
                 .centorCoordinates(new Coordinates(2.0, 2.0))
-                .zoom(8)
                 .build());
 
         StarMapPin pin = StarMapPin.builder()

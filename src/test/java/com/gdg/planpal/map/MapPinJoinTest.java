@@ -34,9 +34,7 @@ class MapPinJoinTest {
     @BeforeEach
     void setUp() {
         MapBoard map = mapRepository.save(MapBoard.builder()
-                .mapId("map1")
                 .centorCoordinates(new Coordinates(1.0, 1.0))
-                .zoom(10)
                 .build());
 
         StarMapPin pin = StarMapPin.builder()

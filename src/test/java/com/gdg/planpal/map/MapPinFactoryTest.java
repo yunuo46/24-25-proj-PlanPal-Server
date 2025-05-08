@@ -44,9 +44,7 @@ class MapPinFactoryTest {
     @BeforeEach
     void setup() {
         mapBoard = MapBoard.builder()
-                .mapId("test-map")
                 .centorCoordinates(new Coordinates(0.0, 0.0))
-                .zoom(10)
                 .build();
         mapRepository.save(mapBoard);
     }

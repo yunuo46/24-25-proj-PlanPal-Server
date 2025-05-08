@@ -35,9 +35,7 @@ class MapJoinTest {
     @BeforeEach
     void setup() {
         MapBoard map = mapRepository.save(MapBoard.builder()
-                .mapId("map3")
                 .centorCoordinates(new Coordinates(0.0, 0.0))
-                .zoom(12)
                 .build());
 
         mapPinRepository.saveAll(List.of(
