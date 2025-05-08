@@ -20,6 +20,7 @@ public class MapService {
 
     @Transactional(readOnly = true)
     public MapResponse getMapInfo(Long chatRoomId) {
+        // To Do: userchatroom에서 user id 비교해서 채팅방에 참여한 유저인지 확인 로직
         MapBoard mapBoard = mapRepository.findWithPinsByChatRoomId(chatRoomId)
                 .orElseThrow(() -> new IllegalArgumentException("Map not found for chatRoomId: " + chatRoomId));
         return MapResponse.from(mapBoard);

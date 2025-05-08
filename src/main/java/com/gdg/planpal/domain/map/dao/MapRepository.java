@@ -10,7 +10,7 @@ import java.util.Optional;
 public interface MapRepository extends JpaRepository<MapBoard, Long> {
     @Query("""
        SELECT m FROM MapBoard m
-       JOIN FETCH m.pins
+       LEFT JOIN FETCH m.pins
        WHERE m.chatRoom.id = :chatRoomId
     """)
     Optional<MapBoard> findWithPinsByChatRoomId(@Param("chatRoomId") Long chatRoomId);
