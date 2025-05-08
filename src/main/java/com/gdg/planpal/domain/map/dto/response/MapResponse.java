@@ -21,9 +21,7 @@ public record MapResponse(
                 mapBoard.getChatRoom().getId(),
                 mapBoard.getCentorCoordinates().getLat(),
                 mapBoard.getCentorCoordinates().getLng(),
-                mapBoard.getPins() == null
-                        ? List.of()
-                        : mapBoard.getPins().stream().map(MapPinResponse::from).collect(Collectors.toList()),
+                mapBoard.getPins().stream().map(MapPinResponse::from).collect(Collectors.toList()),
                 mapBoard.getCreatedAt()
         );
     }

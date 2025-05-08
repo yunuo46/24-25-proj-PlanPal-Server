@@ -71,7 +71,7 @@ public class ChatRoomService {
 
     @Transactional
     public ChatRoomResponse joinChatRoom(ChatRoomJoinRequest request, Long userId) {
-        ChatRoom chatRoom = chatRoomRepository.findByInviteCode(request.getInviteCode())
+        ChatRoom chatRoom = chatRoomRepository.findByInviteCode(request.inviteCode())
                 .orElseThrow(() -> new IllegalArgumentException("잘못된 초대 코드입니다."));
 
         User user = userRepository.findById(userId)
@@ -120,7 +120,7 @@ public class ChatRoomService {
         }
 
         try {
-            room.updateInfo(request.getName(), request.getDestination(), request.getThumbnailUrl());
+            room.updateInfo(request.name(), request.destination(), request.thumbnailUrl());
         } catch (Exception e) {
             throw new IllegalStateException("채팅방 이름이 존재하지 않습니다.", e);
         }
