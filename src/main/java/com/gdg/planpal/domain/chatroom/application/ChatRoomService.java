@@ -9,6 +9,9 @@ import com.gdg.planpal.domain.chatroom.dto.request.ChatRoomJoinRequest;
 import com.gdg.planpal.domain.chatroom.dto.request.ChatRoomUpdateRequest;
 import com.gdg.planpal.domain.chatroom.dto.response.ChatRoomResponse;
 import com.gdg.planpal.domain.chatroom.dto.response.ChatRoomSummaryResponse;
+import com.gdg.planpal.domain.map.dao.MapRepository;
+import com.gdg.planpal.domain.map.domain.Coordinates;
+import com.gdg.planpal.domain.map.domain.MapBoard;
 import com.gdg.planpal.domain.user.dao.UserRepository;
 import com.gdg.planpal.domain.user.domain.User;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +29,7 @@ public class ChatRoomService {
     private final ChatRoomRepository chatRoomRepository;
     private final UserChatRoomRepository userChatRoomRepository;
     private final UserRepository userRepository;
+    private final MapRepository mapRepository;
 
     @Transactional(readOnly = true)
     public List<ChatRoomSummaryResponse> getAllSummariesByUser(Long userId) {
@@ -40,15 +44,21 @@ public class ChatRoomService {
                 .orElseThrow(() -> new IllegalArgumentException("유저를 찾을 수 없습니다."));
 
         ChatRoom chatRoom = ChatRoom.builder()
-                .name(request.getName())
-                .limitUsers(request.getLimitUsers())
+                .name(request.name())
+                .limitUsers(request.limitUsers())
                 .inviteCode(generateInviteCode())
-                .destination(request.getDestination())
-                .thumbnailUrl(request.getThumbnailUrl())
+                .destination(request.destination())
+                .thumbnailUrl(request.thumbnailUrl())
                 .owner(owner)
                 .build();
 
         chatRoomRepository.save(chatRoom);
+
+        MapBoard mapBoard = MapBoard.builder()
+                .chatRoom(chatRoom)
+                .centorCoordinates(request.coordinates()) // 초기 좌표, 나중에 수정 가능
+                .build();
+        mapRepository.save(mapBoard);
 
         UserChatRoom participation = UserChatRoom.builder()
                 .user(owner)

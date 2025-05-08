@@ -12,8 +12,6 @@ public record MapResponse(
         Long chatRoomId,
         Double centerLat,
         Double centerLng,
-        Integer zoom,
-        String mapId,
         List<MapPinResponse> pins,
         LocalDateTime createdAt
 ) {
@@ -23,8 +21,6 @@ public record MapResponse(
                 mapBoard.getChatRoom().getId(),
                 mapBoard.getCentorCoordinates().getLat(),
                 mapBoard.getCentorCoordinates().getLng(),
-                mapBoard.getZoom(),
-                mapBoard.getMapId(),
                 mapBoard.getPins().stream().map(MapPinResponse::from).collect(Collectors.toList()),
                 mapBoard.getCreatedAt()
         );

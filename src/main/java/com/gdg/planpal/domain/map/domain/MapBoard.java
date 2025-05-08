@@ -28,10 +28,6 @@ public class MapBoard {
     @Column(nullable = false)
     private Coordinates centorCoordinates;
 
-    private Integer zoom;
-
-    private String mapId;
-
     @OneToMany(mappedBy = "mapBoard", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MapPin> pins = new ArrayList<>();
 
