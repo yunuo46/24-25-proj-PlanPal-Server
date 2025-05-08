@@ -28,6 +28,8 @@ public class MapService {
 
     @Transactional
     public void savePin(Long mapId, MapPinRequest request) {
+        // To Do : STAR로 받을 때, HEART로 이미 존재하면 STAR로 바꾸기
+        // 이미 STAR로 존재한다면 스케쥴 변경하기
         MapBoard mapBoard = mapRepository.findById(mapId)
                 .orElseThrow(() -> new IllegalArgumentException("Map not found with id: " + mapId));
 

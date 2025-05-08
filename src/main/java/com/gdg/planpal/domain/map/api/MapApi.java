@@ -20,6 +20,7 @@ public class MapApi {
         return ResponseEntity.ok(mapService.getMapInfo(chatRoomId));
     }
 
+    // To Do: map id -> chatroom id
     @PostMapping("/{mapId}/pins")
     @Operation(summary = "핀 저장", description = "지도에 핀을 추가합니다.")
     public ResponseEntity<Void> savePin(@PathVariable Long mapId, @RequestBody MapPinRequest request) {
@@ -27,6 +28,7 @@ public class MapApi {
         return ResponseEntity.ok().build();
     }
 
+    // To Do: map id -> chatroom id && pin id -> place id
     @DeleteMapping("/{mapId}/pins/{pinId}")
     @Operation(summary = "핀 삭제", description = "지도에 저장된 핀을 삭제합니다.")
     public ResponseEntity<Void> deletePin(@PathVariable Long mapId, @PathVariable Long pinId) {
