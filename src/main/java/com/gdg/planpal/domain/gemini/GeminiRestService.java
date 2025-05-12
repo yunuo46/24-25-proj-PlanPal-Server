@@ -24,12 +24,10 @@ public class GeminiRestService {
 
     private final WebClient webClient;
 
-    @Value("${spring.ai.vertex.ai.gemini.api-key}")
-    private String apiKey;
     //@Value("${spring.ai.vertex.ai.gemini.location}")
     private String location="us-central1";
     @Value("${spring.ai.vertex.ai.gemini.project-id}")
-    private String projectId;
+    private String git ;
 
     private String modelId="gemini-2.0-flash";
 

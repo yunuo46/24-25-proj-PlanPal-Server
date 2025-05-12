@@ -1,6 +1,5 @@
 package com.gdg.planpal.domain.gemini.functionCall.Spot;
 
-import com.example.gemini_ai.gemini.Spot.Spot;
 import com.google.cloud.vertexai.api.FunctionDeclaration;
 import com.google.cloud.vertexai.api.Schema;
 import com.google.cloud.vertexai.api.Type;
