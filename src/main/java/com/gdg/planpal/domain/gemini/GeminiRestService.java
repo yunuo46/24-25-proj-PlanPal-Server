@@ -27,7 +27,7 @@ public class GeminiRestService {
     //@Value("${spring.ai.vertex.ai.gemini.location}")
     private String location="us-central1";
     @Value("${spring.ai.vertex.ai.gemini.project-id}")
-    private String git ;
+    private String projectId;
 
     private String modelId="gemini-2.0-flash";
 
