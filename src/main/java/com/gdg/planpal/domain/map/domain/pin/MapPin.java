@@ -3,9 +3,11 @@ package com.gdg.planpal.domain.map.domain.pin;
 import com.gdg.planpal.domain.map.domain.Coordinates;
 import com.gdg.planpal.domain.map.domain.IconType;
 import com.gdg.planpal.domain.map.domain.MapBoard;
+import com.gdg.planpal.domain.user.domain.User;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
@@ -25,6 +27,10 @@ public abstract class MapPin {
     @JoinColumn(name = "mapboard_id")
     private MapBoard mapBoard;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
     @Embedded
     @Column(nullable = false)
     private Coordinates coordinates;
@@ -32,14 +38,24 @@ public abstract class MapPin {
     @Column(nullable = false)
     private String placeId;
 
+    @Column(nullable = false)
+    private String title;
+
+    @Column(nullable = false)
+    private String address;
+
+    @Column(nullable = false)
     private String content;
 
-    private LocalDateTime createdAt;
+    @Column(nullable = false)
+    private String type;
 
-    @PrePersist
-    public void prePersist() {
-        this.createdAt = LocalDateTime.now();
-    }
+    @Column(nullable = false)
+    private double rating;
+
+    @CreationTimestamp
+    @Column(updatable = false)
+    private LocalDateTime createdAt;
 
     public abstract IconType getIconType();
 }

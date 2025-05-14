@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -24,9 +25,9 @@ public class MapApi {
 
     // To Do: map id -> chatroom id
     @PostMapping("/{mapId}/pins")
-    @Operation(summary = "핀 저장", description = "지도에 핀을 추가합니다.")
-    public ResponseEntity<Void> savePin(@PathVariable Long mapId, @RequestBody MapPinRequest request) {
-        mapService.savePin(mapId, request);
+    @Operation(summary = "핀 저장 및 스케쥴 추가", description = "지도에 핀을 추가합니다. 스케쥴이 존재한다면, 스케쥴을 추가합니다.")
+    public ResponseEntity<Void> savePin(@PathVariable Long mapId, @RequestBody MapPinRequest request, @AuthenticationPrincipal Long userId) {
+        mapService.savePin(mapId, request, userId);
         return ResponseEntity.ok().build();
     }
 

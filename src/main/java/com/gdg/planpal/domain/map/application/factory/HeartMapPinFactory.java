@@ -9,6 +9,7 @@ import com.gdg.planpal.domain.map.domain.pin.StarMapPin;
 import com.gdg.planpal.domain.schedule.domain.StarMapPinSchedule;
 import com.gdg.planpal.domain.map.dto.request.MapPinRequest;
 import com.gdg.planpal.domain.map.dto.request.ScheduleRequest;
+import com.gdg.planpal.domain.user.domain.User;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -19,12 +20,17 @@ public class HeartMapPinFactory implements MapPinFactory{
     }
 
     @Override
-    public MapPin create(MapBoard mapBoard, MapPinRequest request) {
+    public MapPin create(MapBoard mapBoard, MapPinRequest request, User user) {
         return HeartMapPin.builder()
                 .mapBoard(mapBoard)
+                .user(user)
                 .coordinates(new Coordinates(request.lat(), request.lng()))
                 .placeId(request.placeId())
+                .title(request.title())
+                .address(request.address())
                 .content(request.content())
+                .type(request.type())
+                .rating(request.rating())
                 .build();
     }
 
