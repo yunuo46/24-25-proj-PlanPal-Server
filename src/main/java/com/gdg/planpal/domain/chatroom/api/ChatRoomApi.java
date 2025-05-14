@@ -26,6 +26,7 @@ public class ChatRoomApi {
     @GetMapping
     @Operation(summary = "채팅방 요약 목록 조회", description = "유저가 참여 중인 채팅방들의 요약 정보를 조회합니다.")
     public ResponseEntity<List<ChatRoomSummaryResponse>> list(@AuthenticationPrincipal Long userId) {
+        System.out.println("userId = " + userId);
         return ResponseEntity.ok(chatRoomService.getAllSummariesByUser(userId));
     }
 
