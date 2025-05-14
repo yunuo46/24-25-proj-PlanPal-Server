@@ -27,6 +27,7 @@ public class StarMapPinFactory implements MapPinFactory{
                 .coordinates(new Coordinates(request.lat(), request.lng()))
                 .placeId(request.placeId())
                 .content(request.content())
+                .placeName(request.placeName())
                 .build();
 
         List<StarMapPinSchedule> schedules = Optional.ofNullable(request.schedules())

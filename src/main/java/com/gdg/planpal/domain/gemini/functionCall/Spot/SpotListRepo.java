@@ -23,7 +23,7 @@ public class SpotListRepo {
     public Map<Long,String> getSpotList(Long mapId){
         System.out.println("getSpotList called");
         List<MapPin> mapPins = mapPinRepository.findByMapBoardId(mapId);
-        return mapPins.stream().collect(Collectors.toMap(MapPin::getId,MapPin::getContent));
+        return mapPins.stream().collect(Collectors.toMap(MapPin::getId,MapPin::getPlaceName));
     }
 
     public FunctionDeclaration getFunctionDeclaration(){

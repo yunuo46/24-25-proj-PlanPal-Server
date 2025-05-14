@@ -56,11 +56,11 @@ public class PlanpalServiceTest {
 // 2. 리턴할 가짜 MapPin 객체들 생성
         MapPin pin1 = mock(MapPin.class);
         when(pin1.getId()).thenReturn(1L);
-        when(pin1.getContent()).thenReturn("카페");
+        when(pin1.getPlaceName()).thenReturn("Royal Botanic Gardens Melbourne");
 
         MapPin pin2 = mock(MapPin.class);
         when(pin2.getId()).thenReturn(2L);
-        when(pin2.getContent()).thenReturn("도서관");
+        when(pin2.getPlaceName()).thenReturn("National Gallery of Victoria");
 
 
         MapResponse mockResponse = mock(MapResponse.class);

@@ -34,11 +34,11 @@ public class spotRepoTest {
         mapPinRepository = mock(MapPinRepository.class);
         MapPin pin1 = mock(MapPin.class);
         when(pin1.getId()).thenReturn(101L);
-        when(pin1.getContent()).thenReturn("카페");
+        when(pin1.getPlaceName()).thenReturn("Royal Botanic Gardens Melbourne");
 
         MapPin pin2 = mock(MapPin.class);
         when(pin2.getId()).thenReturn(102L);
-        when(pin2.getContent()).thenReturn("도서관");
+        when(pin2.getPlaceName()).thenReturn("National Gallery of Victoria");
 
         List<MapPin> mockPins = Arrays.asList(pin1, pin2);
         when(mapPinRepository.findByMapBoardId(mapBoardId)).thenReturn(mockPins);
@@ -58,8 +58,8 @@ public class spotRepoTest {
 
         // then
         assertEquals(2, result.size());
-        assertEquals("카페", result.get(101L));
-        assertEquals("도서관", result.get(102L));
+        assertEquals("Royal Botanic Gardens Melbourne", result.get(101L));
+        assertEquals("National Gallery of Victoria", result.get(102L));
     }
 
     @Test

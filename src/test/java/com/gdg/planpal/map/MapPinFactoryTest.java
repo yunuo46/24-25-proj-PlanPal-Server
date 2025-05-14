@@ -53,7 +53,7 @@ class MapPinFactoryTest {
     void HeartPin_create_success() {
         // given
         MapPinRequest request = new MapPinRequest(
-                37.123, 127.456, "내용", IconType.HEART, "place-123",null
+                37.123, 127.456, "내용", IconType.HEART, "place-123",null,"장소1"
         );
 
         // when
@@ -73,7 +73,7 @@ class MapPinFactoryTest {
         );
 
         MapPinRequest request = new MapPinRequest(
-                37.123, 127.456, "스케줄 내용", IconType.STAR, "place-456",schedules
+                37.123, 127.456, "스케줄 내용", IconType.STAR, "place-456",schedules,"장소2"
         );
 
         // when

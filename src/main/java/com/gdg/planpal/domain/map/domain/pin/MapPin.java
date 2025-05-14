@@ -32,6 +32,8 @@ public abstract class MapPin {
     @Column(nullable = false)
     private String placeId;
 
+    private String placeName;
+
     private String content;
 
     private LocalDateTime createdAt;
