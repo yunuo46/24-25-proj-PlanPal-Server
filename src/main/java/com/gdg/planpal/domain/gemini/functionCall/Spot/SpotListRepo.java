@@ -1,20 +1,29 @@
 package com.gdg.planpal.domain.gemini.functionCall.Spot;
 
+import com.gdg.planpal.domain.map.dao.MapPinRepository;
+import com.gdg.planpal.domain.map.domain.pin.MapPin;
 import com.google.cloud.vertexai.api.FunctionDeclaration;
 import com.google.cloud.vertexai.api.Schema;
 import com.google.cloud.vertexai.api.Type;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Component
+@RequiredArgsConstructor
 public class SpotListRepo {
-    public Map<String,String> getSpotList(){
+
+    private final MapPinRepository mapPinRepository;
+
+    public Map<Long,String> getSpotList(Long mapId){
         System.out.println("getSpotList called");
-        return Map.of("spot-address",List.of("Royal Botanic Gardens Melbourne, Birdwood Ave, South Yarra VIC 3141", "Australia, National Gallery of Victoria, 180 St Kilda Rd, Melbourne VIC 3006", "Australia, Federation Square, Swanston St & Flinders St, Melbourne VIC 3000, Australia, Queen Victoria Market")
-                .toString());
+        List<MapPin> mapPins = mapPinRepository.findByMapBoardId(mapId);
+        return mapPins.stream().collect(Collectors.toMap(MapPin::getId,MapPin::getContent));
     }
 
     public FunctionDeclaration getFunctionDeclaration(){

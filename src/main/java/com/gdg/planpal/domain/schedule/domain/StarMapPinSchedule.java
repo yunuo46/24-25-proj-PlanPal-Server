@@ -36,4 +36,8 @@ public class StarMapPinSchedule {
         this.startTime = request.startTime();
         this.endTime = request.endTime();
     }
+
+    public String toString(){
+        return "["+this.mapPin.getId().toString()+":"+this.mapPin.getContent()+"]"+this.startTime.toString()+"~"+this.endTime;
+    }
 }

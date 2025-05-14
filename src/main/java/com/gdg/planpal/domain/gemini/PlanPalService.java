@@ -4,6 +4,8 @@ package com.gdg.planpal.domain.gemini;
 import com.gdg.planpal.domain.gemini.functionCall.Spot.AddSpotList;
 import com.gdg.planpal.domain.gemini.functionCall.Spot.SpotListRepo;
 import com.gdg.planpal.domain.gemini.functionCall.schedule.*;
+import com.gdg.planpal.domain.map.application.MapService;
+import com.gdg.planpal.domain.schedule.domain.StarMapPinSchedule;
 import com.google.cloud.vertexai.VertexAI;
 import com.google.cloud.vertexai.api.*;
 import com.google.cloud.vertexai.generativeai.*;
@@ -35,7 +37,11 @@ public class PlanPalService {
     private final GeminiRestService geminiRestService;
     private final ScheduleRepo scheduleRepo;
     private final AddSchedule addSchedule;
-    public String chat(String prompt) {
+    private final MapService mapService;
+    public String chat(Long chatRoomId, String prompt) {
+
+        Long mapId = mapService.getMapInfo(chatRoomId).id();
+
         VertexAI vertexAI = new VertexAI(projectId, location);
         String addSpotPrompt = """
                 이는 여행을 계획하는 사용자의 대화 혹은 질문이야.
@@ -106,7 +112,7 @@ public class PlanPalService {
         Content toolResponse=null;
         if (ResponseHandler.getFunctionCalls(response).stream().anyMatch(fun -> fun.getName().equals("getSpotList"))){
 
-            Map<String, String> result = spotListRepo.getSpotList();
+            Map<Long, String> result = spotListRepo.getSpotList(mapId);
 //            toolResponse= ContentMaker.fromMultiModalData(
 //                    PartMaker.fromFunctionResponse("getSpotList", Collections.singletonMap("current spot list", result.get("spot-address")))
 //            );
@@ -115,8 +121,8 @@ public class PlanPalService {
         }
         if (ResponseHandler.getFunctionCalls(response).stream().anyMatch(fun -> fun.getName().equals("getSchedule"))){
 
-            String result = scheduleRepo.getSchedule().stream()
-                    .map(Schedule::toString)
+            String result = scheduleRepo.getSchedule(mapId).stream()
+                    .map(StarMapPinSchedule::toString)
                     .reduce((s1,s2)->s1+"\n"+s2)
                     .orElse("일정 아직 없음");
             System.out.println("List to string \n:"+result);

@@ -16,8 +16,8 @@ public class GeminiController {
     private final PlanPalService planPalService;
 
     @GetMapping("/plan-pal")
-    public String planPal_chat(@RequestParam String prompt) {
-        return planPalService.chat(prompt);
+    public String planPal_chat(@RequestParam Long chatRoomId,@RequestParam String prompt) {
+        return planPalService.chat(chatRoomId,prompt);
     }
 
     public Mono<ResponseEntity<String>> groundedQuery(@RequestParam String prompt) {
