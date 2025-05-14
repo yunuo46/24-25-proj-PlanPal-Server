@@ -4,6 +4,7 @@ import com.gdg.planpal.domain.map.application.MapService;
 import com.gdg.planpal.domain.map.dto.request.MapPinRequest;
 import com.gdg.planpal.domain.map.dto.response.MapResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/maps")
+@SecurityRequirement(name = "accessToken")
 public class MapApi {
     private final MapService mapService;
 

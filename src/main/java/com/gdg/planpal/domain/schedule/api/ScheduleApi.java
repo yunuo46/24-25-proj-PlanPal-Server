@@ -3,6 +3,7 @@ package com.gdg.planpal.domain.schedule.api;
 import com.gdg.planpal.domain.schedule.application.ScheduleService;
 import com.gdg.planpal.domain.schedule.domain.StarMapPinSchedule;
 import com.gdg.planpal.domain.map.dto.request.ScheduleRequest;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.v3.oas.annotations.Operation;
@@ -12,6 +13,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/schedules")
 @RequiredArgsConstructor
+@SecurityRequirement(name = "accessToken")
 public class ScheduleApi {
 
     private final ScheduleService scheduleService;

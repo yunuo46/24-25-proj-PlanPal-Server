@@ -7,6 +7,7 @@ import com.gdg.planpal.domain.chatroom.dto.request.ChatRoomUpdateRequest;
 import com.gdg.planpal.domain.chatroom.dto.response.ChatRoomResponse;
 import com.gdg.planpal.domain.chatroom.dto.response.ChatRoomSummaryResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -17,6 +18,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/chat-rooms")
 @RequiredArgsConstructor
+@SecurityRequirement(name = "accessToken")
 public class ChatRoomApi {
 
     private final ChatRoomService chatRoomService;
