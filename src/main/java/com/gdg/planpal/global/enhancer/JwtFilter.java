@@ -1,7 +1,6 @@
 package com.gdg.planpal.global.enhancer;
 
 import com.gdg.planpal.domain.auth.util.TokenProvider;
-import com.gdg.planpal.global.exception.UnauthorizedException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -26,18 +25,10 @@ public class JwtFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws IOException, ServletException {
         String jwt = resolveToken(request);
 
-        if (!StringUtils.hasText(jwt)) {
-            setUnauthorizedResponse(response, "Access Token이 존재하지 않습니다.");
-            return;
+        if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) {
+            Authentication authentication = tokenProvider.getAuthentication(jwt);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
         }
-        if (!tokenProvider.validateToken(jwt)) {
-            setUnauthorizedResponse(response, "유효하지 않은 Access Token입니다.");
-            return;
-        }
-
-
-        Authentication authentication = tokenProvider.getAuthentication(jwt);
-        SecurityContextHolder.getContext().setAuthentication(authentication);
 
         filterChain.doFilter(request, response);
     }
@@ -48,17 +39,5 @@ public class JwtFilter extends OncePerRequestFilter {
             return bearerToken.substring(7);
         }
         return null;
-    }
-
-    private void setUnauthorizedResponse(HttpServletResponse response, String message) throws IOException {
-        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-        response.setContentType("application/json");
-        response.getWriter().write("""
-        {
-            "status": 401,
-            "error": "Unauthorized",
-            "message": "%s"
-        }
-        """.formatted(message));
     }
 }

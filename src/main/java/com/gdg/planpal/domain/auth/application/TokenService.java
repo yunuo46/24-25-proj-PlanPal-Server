@@ -9,10 +9,12 @@ import com.gdg.planpal.domain.user.dao.UserRepository;
 import com.gdg.planpal.domain.user.domain.User;
 import com.gdg.planpal.domain.user.dto.UserClaim;
 import com.gdg.planpal.global.exception.UnauthorizedException;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 @Service
 @RequiredArgsConstructor
@@ -24,7 +26,10 @@ public class TokenService {
     private final UserRepository userRepository;
 
     @Transactional
-    public Tokens reissue(String refreshToken) {
+    public Tokens reissue(String refreshToken, String authorizationHeader) {
+        if (!StringUtils.hasText(authorizationHeader) || !authorizationHeader.startsWith("Bearer ")) {
+            throw new UnauthorizedException("Access Token이 존재하지 않습니다.");
+        }
         if (!tokenProvider.validateToken(refreshToken)) {
             throw new UnauthorizedException("유효하지 않은 Refresh Token입니다.");
         }
