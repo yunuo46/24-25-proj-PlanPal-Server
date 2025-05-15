@@ -31,10 +31,6 @@ public abstract class MapPin {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Embedded
-    @Column(nullable = false)
-    private Coordinates coordinates;
-
     @Column(nullable = false)
     private String placeId;
 

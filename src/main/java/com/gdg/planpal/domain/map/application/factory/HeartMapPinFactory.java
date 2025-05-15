@@ -24,7 +24,6 @@ public class HeartMapPinFactory implements MapPinFactory{
         return HeartMapPin.builder()
                 .mapBoard(mapBoard)
                 .user(user)
-                .coordinates(new Coordinates(request.lat(), request.lng()))
                 .placeId(request.placeId())
                 .title(request.title())
                 .address(request.address())

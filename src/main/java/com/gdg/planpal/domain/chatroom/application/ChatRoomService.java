@@ -57,7 +57,7 @@ public class ChatRoomService {
 
         MapBoard mapBoard = MapBoard.builder()
                 .chatRoom(chatRoom)
-                .centorCoordinates(request.coordinates()) // 초기 좌표, 나중에 수정 가능
+                .centerCoordinates(request.coordinates()) // 초기 좌표, 나중에 수정 가능
                 .build();
         mapRepository.save(mapBoard);
 

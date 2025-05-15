@@ -39,7 +39,6 @@ public class StarMapPinFactory implements MapPinFactory{
             StarMapPin newPin = StarMapPin.builder()
                     .mapBoard(mapBoard)
                     .user(user)
-                    .coordinates(new Coordinates(request.lat(), request.lng()))
                     .placeId(request.placeId())
                     .title(request.title())
                     .address(request.address())

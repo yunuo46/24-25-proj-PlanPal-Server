@@ -26,7 +26,7 @@ public class MapBoard {
 
     @Embedded
     @Column(nullable = false)
-    private Coordinates centorCoordinates;
+    private Coordinates centerCoordinates;
 
     @OneToMany(mappedBy = "mapBoard", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default

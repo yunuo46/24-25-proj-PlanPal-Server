@@ -7,8 +7,6 @@ import jakarta.validation.constraints.NotNull;
 import java.util.List;
 
 public record MapPinRequest(
-        @NotNull(message = "위도는 필수 항목입니다.") Double lat,
-        @NotNull(message = "경도는 필수 항목입니다.") Double lng,
         @NotNull(message = "제목은 필수 항목입니다.") String title,
         @NotNull(message = "주소는 필수 항목입니다.") String address,
         @NotNull(message = "상세 설명은 필수 항목입니다.") String content,

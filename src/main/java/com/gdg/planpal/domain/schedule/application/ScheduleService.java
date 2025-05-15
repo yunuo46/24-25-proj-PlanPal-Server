@@ -53,7 +53,6 @@ public class ScheduleService {
         if (pin.getSchedules().isEmpty()) {
             HeartMapPin newHeartPin = HeartMapPin.builder()
                     .mapBoard(pin.getMapBoard())
-                    .coordinates(pin.getCoordinates())
                     .placeId(pin.getPlaceId())
                     .content(pin.getContent())
                     .build();
