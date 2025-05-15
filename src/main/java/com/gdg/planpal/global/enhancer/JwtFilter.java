@@ -1,6 +1,7 @@
 package com.gdg.planpal.global.enhancer;
 
 import com.gdg.planpal.domain.auth.util.TokenProvider;
+import com.gdg.planpal.global.exception.UnauthorizedException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -25,10 +26,15 @@ public class JwtFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws IOException, ServletException {
         String jwt = resolveToken(request);
 
-        if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) {
-            Authentication authentication = tokenProvider.getAuthentication(jwt);
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+        if (!StringUtils.hasText(jwt)) {
+            throw new UnauthorizedException("Access Token이 존재하지 않습니다.");
         }
+        if (!tokenProvider.validateToken(jwt)) {
+            throw new UnauthorizedException("유효하지 않은 Access Token입니다.");
+        }
+
+        Authentication authentication = tokenProvider.getAuthentication(jwt);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
 
         filterChain.doFilter(request, response);
     }

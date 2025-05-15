@@ -47,7 +47,7 @@ public class TokenService {
     @Transactional
     public void deleteRefreshToken(String refreshToken) {
         if (!tokenProvider.validateToken(refreshToken)) {
-            throw new IllegalArgumentException("유효하지 않은 토큰입니다.");
+            throw new UnauthorizedException("유효하지 않은 토큰입니다.");
         }
         refreshTokenRepository.deleteByValue(refreshToken);
     }
