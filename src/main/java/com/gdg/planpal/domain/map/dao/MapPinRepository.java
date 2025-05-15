@@ -17,4 +17,7 @@ public interface MapPinRepository extends JpaRepository<MapPin, Long> {
         WHERE p.mapBoard.id = :mapBoardId
     """)
     List<StarMapPin> findAllWithSchedulesByMapBoardId(@Param("mapBoardId") Long mapBoardId);
+
+
+    List<MapPin> findByMapBoardId(Long mapBoardId);
 }

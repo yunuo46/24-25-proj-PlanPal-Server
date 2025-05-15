@@ -45,6 +45,7 @@ public abstract class MapPin {
     private String address;
 
     @Column(nullable = false)
+
     private String content;
 
     @Column(nullable = false)
