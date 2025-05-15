@@ -9,6 +9,7 @@ import com.gdg.planpal.domain.chatroom.dto.request.ChatRoomJoinRequest;
 import com.gdg.planpal.domain.chatroom.dto.request.ChatRoomUpdateRequest;
 import com.gdg.planpal.domain.chatroom.dto.response.ChatRoomResponse;
 import com.gdg.planpal.domain.chatroom.dto.response.ChatRoomSummaryResponse;
+import com.gdg.planpal.domain.chatroom.dto.response.InviteCodeResponse;
 import com.gdg.planpal.domain.map.dao.MapRepository;
 import com.gdg.planpal.domain.map.domain.Coordinates;
 import com.gdg.planpal.domain.map.domain.MapBoard;
@@ -129,13 +130,15 @@ public class ChatRoomService {
     }
 
     @Transactional(readOnly = true)
-    public String getInviteCode(Long chatRoomId, Long userId) {
+    public InviteCodeResponse getInviteCode(Long chatRoomId, Long userId) {
         if (!userChatRoomRepository.existsByUserIdAndChatRoomId(userId, chatRoomId)) {
             throw new SecurityException("채팅방에 참여 중인 유저만 초대 코드를 조회할 수 있습니다.");
         }
-        return chatRoomRepository.findById(chatRoomId)
+
+        String inviteCode = chatRoomRepository.findById(chatRoomId)
                 .map(ChatRoom::getInviteCode)
                 .orElseThrow(() -> new IllegalArgumentException("채팅방이 존재하지 않습니다."));
+        return new InviteCodeResponse(inviteCode);
     }
 
     private String generateInviteCode() {
