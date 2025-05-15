@@ -105,6 +105,7 @@ public class ChatRoomService {
 
         if (room.getOwner().getId().equals(userId)) {
             chatRoomRepository.delete(room); // 방 주인이면 삭제
+
         } else {
             userChatRoomRepository.deleteByUserIdAndChatRoomId(userId, chatRoomId); // 참여자는 나가기
         }

@@ -44,7 +44,7 @@ public class ChatRoom {
     @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<UserChatRoom> userChatRooms = new ArrayList<>();
 
-    @OneToOne(mappedBy = "chatRoom")
+    @OneToOne(mappedBy = "chatRoom", cascade = CascadeType.ALL, orphanRemoval = true)
     private MapBoard mapBoard;
 
     @PrePersist
