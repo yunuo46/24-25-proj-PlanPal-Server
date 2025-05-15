@@ -10,6 +10,7 @@
 <div class="container">
     <h1>Spring Security 권한 관리</h1>
     <button id="google-login" class="btn btn-primary">Google 로그인</button>
+    <div id="login-result" class="alert alert-info" style="margin-top: 20px;"></div>
 </div>
 
 <script>
@@ -23,26 +24,23 @@
 
         window.location.href = authUrl;
     });
-</script>
 
-<script>
     $(document).ready(function () {
         if (window.location.pathname === '/oauth/google/callback') {
             const params = new URLSearchParams(window.location.search);
             const code = params.get('code');
 
             if (code) {
-                // code를 다시 백엔드 POST로 전달
                 $.ajax({
                     url: '/api/auth/google',
                     type: 'POST',
                     contentType: 'application/json',
-                    data: JSON.stringify({ authorizationCode: code  }),
+                    data: JSON.stringify({ authorizationCode: code }),
                     success: function (response) {
-                        alert('로그인 성공: ' + JSON.stringify(response));
+                        $('#login-result').text('로그인 성공: ' + JSON.stringify(response, null, 2));
                     },
                     error: function (xhr, status, error) {
-                        alert('로그인 실패: ' + xhr.responseText);
+                        $('#login-result').text('로그인 실패: ' + xhr.responseText);
                     }
                 });
             }

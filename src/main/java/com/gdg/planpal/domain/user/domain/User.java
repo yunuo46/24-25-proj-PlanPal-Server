@@ -1,9 +1,12 @@
 package com.gdg.planpal.domain.user.domain;
 
+import com.gdg.planpal.domain.map.domain.pin.MapPin;
 import com.gdg.planpal.infra.domain.oauth.OauthInfoResponse;
 import com.gdg.planpal.infra.domain.oauth.OauthProvider;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.List;
 
 @Entity
 @Getter
@@ -25,6 +28,9 @@ public class User {
     private OauthProvider oauthProvider;
 
     private String profileImageUrl;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<MapPin> mapPins;
 
     public static User of(OauthInfoResponse oauthInfoResponse) {
         return User.builder()
