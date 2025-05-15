@@ -2,7 +2,6 @@ package com.gdg.planpal.geminiAi.functionCall.Spot;
 
 import com.gdg.planpal.domain.gemini.functionCall.Spot.SpotListRepo;
 import com.gdg.planpal.domain.map.dao.MapPinRepository;
-import com.gdg.planpal.domain.map.domain.MapBoard;
 import com.gdg.planpal.domain.map.domain.pin.MapPin;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -34,11 +33,11 @@ public class spotRepoTest {
         mapPinRepository = mock(MapPinRepository.class);
         MapPin pin1 = mock(MapPin.class);
         when(pin1.getId()).thenReturn(101L);
-        when(pin1.getPlaceName()).thenReturn("Royal Botanic Gardens Melbourne");
+        when(pin1.getTitle()).thenReturn("Royal Botanic Gardens Melbourne");
 
         MapPin pin2 = mock(MapPin.class);
         when(pin2.getId()).thenReturn(102L);
-        when(pin2.getPlaceName()).thenReturn("National Gallery of Victoria");
+        when(pin2.getTitle()).thenReturn("National Gallery of Victoria");
 
         List<MapPin> mockPins = Arrays.asList(pin1, pin2);
         when(mapPinRepository.findByMapBoardId(mapBoardId)).thenReturn(mockPins);
