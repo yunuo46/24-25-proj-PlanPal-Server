@@ -26,10 +26,7 @@ public class TokenService {
     private final UserRepository userRepository;
 
     @Transactional
-    public Tokens reissue(String refreshToken, String authorizationHeader) {
-        if (!StringUtils.hasText(authorizationHeader) || !authorizationHeader.startsWith("Bearer ")) {
-            throw new UnauthorizedException("Access Token이 존재하지 않습니다.");
-        }
+    public Tokens reissue(String refreshToken) {
         if (!tokenProvider.validateToken(refreshToken)) {
             throw new UnauthorizedException("유효하지 않은 Refresh Token입니다.");
         }
