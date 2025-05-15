@@ -29,6 +29,7 @@ public class MapBoard {
     private Coordinates centorCoordinates;
 
     @OneToMany(mappedBy = "mapBoard", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
     private List<MapPin> pins = new ArrayList<>();
 
     private LocalDateTime createdAt;
