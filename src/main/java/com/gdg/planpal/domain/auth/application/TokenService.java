@@ -8,6 +8,7 @@ import com.gdg.planpal.domain.auth.util.TokenProvider;
 import com.gdg.planpal.domain.user.dao.UserRepository;
 import com.gdg.planpal.domain.user.domain.User;
 import com.gdg.planpal.domain.user.dto.UserClaim;
+import com.gdg.planpal.global.exception.UnauthorizedException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -25,15 +26,15 @@ public class TokenService {
     @Transactional
     public Tokens reissue(String refreshToken) {
         if (!tokenProvider.validateToken(refreshToken)) {
-            throw new RuntimeException("유효하지 않은 Refresh Token입니다.");
+            throw new UnauthorizedException("유효하지 않은 Refresh Token입니다.");
         }
 
         RefreshToken refreshTokenEntity = refreshTokenRepository.findByValue(refreshToken)
-                .orElseThrow(() -> new RuntimeException("DB에 존재하지 않는 Refresh Token입니다."));
+                .orElseThrow(() -> new UnauthorizedException("DB에 존재하지 않는 Refresh Token입니다."));
 
         Long memberId = Long.valueOf(refreshTokenEntity.getKey());
         User user = userRepository.findById(memberId)
-                .orElseThrow(() -> new RuntimeException("유저를 찾을 수 없습니다."));
+                .orElseThrow(() -> new UnauthorizedException("유저를 찾을 수 없습니다."));
 
         UserClaim userClaim = UserClaim.of(user);
         Tokens newTokens = oauthTokenGenerator.generate(user.getId(), userClaim);
