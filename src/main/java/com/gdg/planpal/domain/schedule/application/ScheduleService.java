@@ -6,6 +6,7 @@ import com.gdg.planpal.domain.map.dao.MapPinRepository;
 import com.gdg.planpal.domain.map.domain.pin.*;
 import com.gdg.planpal.domain.map.dto.request.ScheduleRequest;
 import com.gdg.planpal.domain.schedule.domain.StarMapPinSchedule;
+import com.gdg.planpal.domain.schedule.dto.response.ScheduleResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,22 +22,17 @@ public class ScheduleService {
     private final MapPinFactoryRouter mapPinFactoryRouter;
 
     @Transactional(readOnly = true)
-    public List<StarMapPinSchedule> getSchedulesByMapId(Long mapId) {
-        return scheduleRepository.findAllByMapId(mapId);
+    public List<ScheduleResponse> getSchedulesByMapId(Long mapId) {
+        return scheduleRepository.findAllByMapId(mapId).stream()
+                .map(schedule -> new ScheduleResponse(
+                        schedule.getId(),
+                        schedule.getMapPin().getId(),
+                        schedule.getStartTime(),
+                        schedule.getEndTime()
+                ))
+                .toList();
     }
 
-    @Transactional
-    public void addSchedule(Long pinId, ScheduleRequest request) {
-        MapPin pin = mapPinRepository.findById(pinId)
-                .orElseThrow(() -> new IllegalArgumentException("MapPin not found"));
-
-        MapPin result = mapPinFactoryRouter.addSchedule(pin, request);
-
-        if (!result.getId().equals(pin.getId())) {
-            mapPinRepository.delete(pin);
-        }
-        mapPinRepository.save(result);
-    }
 
     @Transactional
     public void updateSchedule(Long scheduleId, ScheduleRequest request) {

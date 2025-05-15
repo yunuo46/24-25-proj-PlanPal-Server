@@ -23,19 +23,17 @@ public class MapApi {
         return ResponseEntity.ok(mapService.getMapInfo(chatRoomId));
     }
 
-    // To Do: map id -> chatroom id
-    @PostMapping("/{mapId}/pins")
-    @Operation(summary = "핀 저장 및 스케쥴 추가", description = "지도에 핀을 추가합니다. 스케쥴이 존재한다면, 스케쥴을 추가합니다.")
-    public ResponseEntity<Void> savePin(@PathVariable Long mapId, @RequestBody MapPinRequest request, @AuthenticationPrincipal Long userId) {
-        mapService.savePin(mapId, request, userId);
+    @PostMapping("/{chatroomId}/pins")
+    @Operation(summary = "핀 저장 및 스케쥴 추가", description = "지도에 핀을 추가합니다. 요청에 스케쥴이 존재한다면, 스케쥴을 추가합니다.")
+    public ResponseEntity<Void> savePin(@PathVariable Long chatroomId, @RequestBody MapPinRequest request, @AuthenticationPrincipal Long userId) {
+        mapService.savePin(chatroomId, request, userId);
         return ResponseEntity.ok().build();
     }
 
-    // To Do: map id -> chatroom id && pin id -> place id
-    @DeleteMapping("/{mapId}/pins/{pinId}")
+    @DeleteMapping("/{chatroomId}/pins/{placeId}")
     @Operation(summary = "핀 삭제", description = "지도에 저장된 핀을 삭제합니다.")
-    public ResponseEntity<Void> deletePin(@PathVariable Long mapId, @PathVariable Long pinId) {
-        mapService.deletePin(mapId, pinId);
+    public ResponseEntity<Void> deletePin(@PathVariable Long chatroomId, @PathVariable String placeId) {
+        mapService.deletePin(chatroomId, placeId);
         return ResponseEntity.noContent().build();
     }
 }

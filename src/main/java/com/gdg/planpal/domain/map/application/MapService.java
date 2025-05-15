@@ -30,25 +30,21 @@ public class MapService {
     }
 
     @Transactional
-    public void savePin(Long mapId, MapPinRequest request, Long userId) {
+    public void savePin(Long chatroomId, MapPinRequest request, Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("User not found for userId: " + userId));
 
-        MapBoard mapBoard = mapRepository.findById(mapId)
-                .orElseThrow(() -> new IllegalArgumentException("Map not found with id: " + mapId));
+        MapBoard mapBoard = mapRepository.findWithPinsByChatRoomId(chatroomId)
+                .orElseThrow(() -> new IllegalArgumentException("Map not found with chatroom_id: " + chatroomId));
 
-        MapPin pin = mapPinFactoryRouter.create(mapBoard, request, user);
+        MapPin pin = mapPinFactoryRouter.save(mapBoard, request, user);
         mapPinRepository.save(pin);
     }
 
     @Transactional
-    public void deletePin(Long mapId, Long pinId) {
-        MapPin pin = mapPinRepository.findById(pinId)
-                .orElseThrow(() -> new IllegalArgumentException("MapPin not found with id: " + pinId));
-
-        if (!pin.getMapBoard().getId().equals(mapId)) {
-            throw new IllegalArgumentException("MapPin does not belong to the specified Map");
-        }
+    public void deletePin(Long chatroomId, String placeId) {
+        MapPin pin = mapPinRepository.findByMapBoard_ChatRoom_IdAndPlaceId(chatroomId, placeId)
+                .orElseThrow(() -> new IllegalArgumentException("MapPin not found with placeId: " + placeId + " in chatRoomId: " + chatroomId));
 
         mapPinRepository.delete(pin);
     }

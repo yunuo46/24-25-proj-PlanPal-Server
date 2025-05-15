@@ -25,13 +25,8 @@ public class MapPinFactoryRouter {
                 ));
     }
 
-    public MapPin create(MapBoard mapBoard, MapPinRequest request, User user) {
+    public MapPin save(MapBoard mapBoard, MapPinRequest request, User user) {
         MapPinFactory factory = factories.get(request.iconType());
-        return factory.create(mapBoard, request, user);
-    }
-
-    public MapPin addSchedule(MapPin pin, ScheduleRequest request) {
-        MapPinFactory factory = factories.get(pin.getIconType());
-        return factory.addSchedule(pin, request);
+        return factory.save(mapBoard, request, user);
     }
 }

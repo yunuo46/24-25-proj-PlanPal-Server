@@ -20,7 +20,7 @@ public class HeartMapPinFactory implements MapPinFactory{
     }
 
     @Override
-    public MapPin create(MapBoard mapBoard, MapPinRequest request, User user) {
+    public MapPin save(MapBoard mapBoard, MapPinRequest request, User user) {
         return HeartMapPin.builder()
                 .mapBoard(mapBoard)
                 .user(user)
@@ -32,27 +32,5 @@ public class HeartMapPinFactory implements MapPinFactory{
                 .type(request.type())
                 .rating(request.rating())
                 .build();
-    }
-
-    @Override
-    public MapPin addSchedule(MapPin pin, ScheduleRequest request) {
-        if (!(pin instanceof HeartMapPin heartPin)) {
-            throw new IllegalArgumentException("Expected HeartMapPin");
-        }
-
-        StarMapPin starPin = StarMapPin.builder()
-                .mapBoard(heartPin.getMapBoard())
-                .coordinates(heartPin.getCoordinates())
-                .placeId(heartPin.getPlaceId())
-                .content(heartPin.getContent())
-                .build();
-
-        starPin.getSchedules().add(StarMapPinSchedule.builder()
-                .mapPin(starPin)
-                .startTime(request.startTime())
-                .endTime(request.endTime())
-                .build());
-
-        return starPin;
     }
 }
