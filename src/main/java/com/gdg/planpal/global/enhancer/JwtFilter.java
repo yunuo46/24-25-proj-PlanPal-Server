@@ -27,11 +27,14 @@ public class JwtFilter extends OncePerRequestFilter {
         String jwt = resolveToken(request);
 
         if (!StringUtils.hasText(jwt)) {
-            throw new UnauthorizedException("Access Token이 존재하지 않습니다.");
+            setUnauthorizedResponse(response, "Access Token이 존재하지 않습니다.");
+            return;
         }
         if (!tokenProvider.validateToken(jwt)) {
-            throw new UnauthorizedException("유효하지 않은 Access Token입니다.");
+            setUnauthorizedResponse(response, "유효하지 않은 Access Token입니다.");
+            return;
         }
+
 
         Authentication authentication = tokenProvider.getAuthentication(jwt);
         SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -45,5 +48,17 @@ public class JwtFilter extends OncePerRequestFilter {
             return bearerToken.substring(7);
         }
         return null;
+    }
+
+    private void setUnauthorizedResponse(HttpServletResponse response, String message) throws IOException {
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        response.setContentType("application/json");
+        response.getWriter().write("""
+        {
+            "status": 401,
+            "error": "Unauthorized",
+            "message": "%s"
+        }
+        """.formatted(message));
     }
 }
