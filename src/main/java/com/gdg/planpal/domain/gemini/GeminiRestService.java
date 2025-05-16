@@ -40,7 +40,7 @@ public class GeminiRestService {
 
         String accessToken="";
         try {
-            ClassPathResource resource = new ClassPathResource("gemini-ai-455106-770953e73198.json");
+            ClassPathResource resource = new ClassPathResource("gemini-ai-key.json");
 
             GoogleCredentials credentials = GoogleCredentials
                     .fromStream(resource.getInputStream())
