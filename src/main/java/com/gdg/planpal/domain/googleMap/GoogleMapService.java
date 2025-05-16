@@ -51,15 +51,20 @@ public class GoogleMapService {
      * @throws IOException 네트워크 또는 데이터 처리 오류
      * @throws InterruptedException 스레드 중단 오류
      */
-    public PlaceInfoDTO findPlace(String query) throws ApiException, IOException, InterruptedException {
+    public PlaceInfoDTO findPlace(String query) {
         // 1. Text Search 실행
-        PlacesSearchResponse searchResponse = new TextSearchRequest(context)
-                .query(query)
-                // 검색 결과의 지역 편향성을 위해 Location 및 Radius 지정 가능
-                // .location(new com.google.maps.model.LatLng(YOUR_LAT, YOUR_LNG))
-                // .radius(5000) // 미터 단위
-                .await(); // API 호출 대기
-
+        PlacesSearchResponse searchResponse;
+        try {
+            searchResponse = new TextSearchRequest(context)
+                    .query(query)
+                    // 검색 결과의 지역 편향성을 위해 Location 및 Radius 지정 가능
+                    // .location(new com.google.maps.model.LatLng(YOUR_LAT, YOUR_LNG))
+                    // .radius(5000) // 미터 단위
+                    .await(); // API 호출 대기
+        }catch (Exception e){
+           System.out.println(e);
+           return null;
+        }
         if (searchResponse.results == null || searchResponse.results.length == 0) {
             // 검색 결과 없음
             return null;

@@ -40,13 +40,10 @@ public class AddSpotList {
 
         spotList.stream()
                 .map(spot -> {
-                    try {
-                        return googleMapService.findPlace(spot.getSpotName());
-                    }catch(Exception e){
-                        System.out.println("error in google map: "+ e);
-                        new Exception(e);
-                    }
-                    return null;
+
+                    return googleMapService.findPlace(spot.getSpotName());
+
+
                 })
                 .map(place->spotToRequest(place))
                 .peek(mapPinRequest->System.out.println("spot name : "+mapPinRequest.title()))
