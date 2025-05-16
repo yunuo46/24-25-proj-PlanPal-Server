@@ -10,8 +10,8 @@ spring:
     vertex:
       ai:
         gemini:
-          project-id: "gemini-ai-455106"
-          location: "us-central1"
+          project-id: "gen-lang-client-0798322573"
+          location: "asia-northeast3"
           chat:
             options:
               model: gemini-2.0-flash
