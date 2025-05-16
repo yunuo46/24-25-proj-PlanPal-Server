@@ -40,4 +40,5 @@ public class StarMapPinSchedule {
     public String toString(){
         return "["+this.mapPin.getId().toString()+":"+this.mapPin.getContent()+"]"+this.startTime.toString()+"~"+this.endTime;
     }
+
 }

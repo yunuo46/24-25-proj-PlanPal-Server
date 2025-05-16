@@ -56,7 +56,8 @@ public class SecurityConfig {
                         registry
                                 .requestMatchers("/api/auth/**", "/oauth/**").permitAll()
                                 .requestMatchers("/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**", "/swagger-resources/**", "/webjars/**").permitAll()
-                                .requestMatchers("/index.html").permitAll()
+                                .requestMatchers("/index.html").permitAll() // local test
+                                .requestMatchers("/ai/ai-message").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .addFilterBefore(new JwtFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class);;

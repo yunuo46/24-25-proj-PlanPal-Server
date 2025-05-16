@@ -1,23 +1,96 @@
 package com.gdg.planpal.domain.gemini.functionCall.Spot;
 
+import com.gdg.planpal.domain.googleMap.GoogleMapService;
+import com.gdg.planpal.domain.googleMap.PlaceInfoDTO;
+import com.gdg.planpal.domain.map.application.MapService;
+import com.gdg.planpal.domain.map.application.factory.MapPinFactoryRouter;
+import com.gdg.planpal.domain.map.dao.MapPinRepository;
+import com.gdg.planpal.domain.map.domain.IconType;
+import com.gdg.planpal.domain.map.dto.request.MapPinRequest;
 import com.google.cloud.vertexai.api.FunctionDeclaration;
 import com.google.cloud.vertexai.api.Schema;
 import com.google.cloud.vertexai.api.Type;
 import com.google.protobuf.Struct;
 import com.google.protobuf.Value;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
+@RequiredArgsConstructor
 public class AddSpotList {
 
-    public void addSpotList(List<Spot> spotList){
+    private final GoogleMapService googleMapService;
+    private final MapService mapService;
+
+
+    public void addSpotList(String userName, Long mapId, List<Spot> spotList){
         System.out.println("add spot list function");
-        for(Spot spot:spotList){
-            System.out.println("spot name : "+spot.spotName+"; spot address :"+spot.spotAddress);
+        if(spotList==null){
+            System.out.println("spotList is null");
+            return;
         }
+        if(spotList.isEmpty()){
+            System.out.println("spotList is empty");
+            return;
+        }
+
+        spotList.stream()
+                .map(spot -> {
+                    try {
+                        return googleMapService.findPlace(spot.getSpotName());
+                    }catch(Exception e){
+                        System.out.println("error in google map: "+ e);
+                        new Exception(e);
+                    }
+                    return null;
+                })
+                .map(place->spotToRequest(place))
+                .peek(mapPinRequest->System.out.println("spot name : "+mapPinRequest.title()))
+                .forEach(mapPinRequest -> mapService.savePin(mapId,mapPinRequest,userName));
+
+    }
+
+    private MapPinRequest spotToRequest( PlaceInfoDTO placeInfoDTO){
+
+        return new MapPinRequest(
+                placeInfoDTO.getName()
+                , placeInfoDTO.getAddress()
+                ,"content"
+                ,"type"
+                , 5.0
+                , IconType.HEART
+                , placeInfoDTO.getPlaceId()
+                ,placeInfoDTO.getLatitude(),
+                placeInfoDTO.getLongitude()
+                ,null
+
+        );
+    }
+
+    private List<MapPinRequest> spotToRequest( List<PlaceInfoDTO> placeInfoDTOs){
+
+        return placeInfoDTOs.stream()
+                .map(placeInfoDTO->{
+                    return new MapPinRequest(
+                            placeInfoDTO.getName()
+                            , placeInfoDTO.getAddress()
+                            ,"content"
+                            ,"type"
+                            , 5.0
+                            , IconType.HEART
+                            , placeInfoDTO.getPlaceId()
+                            ,placeInfoDTO.getLatitude()
+                            , placeInfoDTO.getLongitude()
+                            ,null
+
+                            );
+                }).collect(Collectors.toList());
+
+
     }
 
     public FunctionDeclaration getFunctionDeclaration(){

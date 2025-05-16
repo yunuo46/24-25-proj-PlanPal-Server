@@ -2,6 +2,9 @@ package com.gdg.planpal.domain.gemini.functionCall.schedule;
 
 import lombok.Data;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 @Data
 public class Schedule {
     Long spotId;
@@ -26,5 +29,17 @@ public class Schedule {
 
     public String toString(){
         return "["+this.spotId.toString()+":"+this.spotName+"]"+this.startDate+":"+this.startTime+"~"+this.endDate+":"+this.endTime;
+    }
+
+    public LocalDateTime convertToLocalTime(String time){
+        return LocalDateTime.parse(time, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+    }
+
+    public LocalDateTime getStartDateTime(){
+        return convertToLocalTime(startDate+" "+startTime);
+    }
+
+    public LocalDateTime getEndDateTime(){
+        return convertToLocalTime(endDate+" "+endTime);
     }
 }
