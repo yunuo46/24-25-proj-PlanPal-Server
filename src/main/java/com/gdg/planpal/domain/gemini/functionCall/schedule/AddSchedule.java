@@ -38,7 +38,7 @@ public class AddSchedule {
                                                                 .setType(Type.OBJECT)
                                                                 .putProperties("spotId", Schema.newBuilder()
                                                                         .setType(Type.NUMBER)
-                                                                        .setDescription("여행 장소의 고유 ID").build())
+                                                                        .setDescription("여행 장소의 고유 ID(모르면 0)").build())
                                                                 .putProperties("startDate", Schema.newBuilder()
                                                                         .setType(Type.STRING)
                                                                         .setFormat("date")

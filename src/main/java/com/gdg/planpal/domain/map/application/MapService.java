@@ -40,6 +40,13 @@ public class MapService {
         MapPin pin = mapPinFactoryRouter.create(mapBoard, request, user);
         mapPinRepository.save(pin);
     }
+    @Transactional
+    public void savePin(Long mapId, MapPinRequest request, String userName){
+        User user = userRepository.findByName(userName)
+                .orElseThrow(() -> new IllegalArgumentException("Map not found with id: " + mapId));
+
+        savePin(mapId,request,user.getId());
+    }
 
     @Transactional
     public void deletePin(Long mapId, Long pinId) {

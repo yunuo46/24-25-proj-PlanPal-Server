@@ -1,3 +1,6 @@
+server:
+  port: 8081
+
 spring:
   jpa:
     hibernate:
@@ -17,4 +20,7 @@ spring:
           chat:
             options:
               model: gemini-2.0-flash
-
+  google:
+    places:
+      api:
+        key: ${GOOGLE_PLACES_API_KEY}

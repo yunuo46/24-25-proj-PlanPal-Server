@@ -38,9 +38,10 @@ public class PlanPalService {
     private final ScheduleRepo scheduleRepo;
     private final AddSchedule addSchedule;
     private final MapService mapService;
-    public String chat(Long chatRoomId, String prompt) {
+    private Long mapId; ;
+    public String chat(String userId,Long chatRoomId, String prompt) {
 
-        Long mapId = mapService.getMapInfo(chatRoomId).id();
+
 
         VertexAI vertexAI = new VertexAI(projectId, location);
         String addSpotPrompt = """
@@ -112,7 +113,8 @@ public class PlanPalService {
         Content toolResponse=null;
         if (ResponseHandler.getFunctionCalls(response).stream().anyMatch(fun -> fun.getName().equals("getSpotList"))){
 
-            Map<Long, String> result = spotListRepo.getSpotList(mapId);
+
+            Map<Long, String> result = spotListRepo.getSpotList(getMapId(chatRoomId));
 //            toolResponse= ContentMaker.fromMultiModalData(
 //                    PartMaker.fromFunctionResponse("getSpotList", Collections.singletonMap("current spot list", result.get("spot-address")))
 //            );
@@ -121,7 +123,7 @@ public class PlanPalService {
         }
         if (ResponseHandler.getFunctionCalls(response).stream().anyMatch(fun -> fun.getName().equals("getSchedule"))){
 
-            String result = scheduleRepo.getSchedule(mapId).stream()
+            String result = scheduleRepo.getSchedule(getMapId(chatRoomId)).stream()
                     .map(StarMapPinSchedule::toString)
                     .reduce((s1,s2)->s1+"\n"+s2)
                     .orElse("일정 아직 없음");
@@ -192,6 +194,7 @@ public class PlanPalService {
                 .withTools(List.of(functionTool));
         ChatSession functionChat = functionModel.startChat();
         try {
+            System.out.println("3차 요청: " +finalPrompt+":"+prompt+":"+toolRecall+":"+searchResult);
             toolRequestResponse = functionChat.sendMessage(finalPrompt+prompt+toolRecall+searchResult);
             System.out.println("3차 응답: " + ResponseHandler.getContent(toolRequestResponse));
         } catch (Exception e) {
@@ -204,9 +207,10 @@ public class PlanPalService {
 
         List<Part> parts = new ArrayList<>();
         if (ResponseHandler.getFunctionCalls(toolRequestResponse).stream().anyMatch(fun -> fun.getName().equals("addSpotList"))){
-             Struct struct = ResponseHandler.getFunctionCalls(toolRequestResponse).stream().filter(fun -> fun.getName().equals("addSpotList")).findFirst().get()
+            System.out.println("addSpotList called");
+            Struct struct = ResponseHandler.getFunctionCalls(toolRequestResponse).stream().filter(fun -> fun.getName().equals("addSpotList")).findFirst().get()
                     .getArgs();
-            addSpotList.addSpotList(addSpotList.structToSpotList(struct));
+            addSpotList.addSpotList(userId, getMapId(chatRoomId), addSpotList.structToSpotList(struct));
             toolResponse= ContentMaker.fromMultiModalData(
                     PartMaker.fromFunctionResponse("addSpotList", Collections.emptyMap())
             );
@@ -214,6 +218,7 @@ public class PlanPalService {
         }
 
         if (ResponseHandler.getFunctionCalls(toolRequestResponse).stream().anyMatch(fun -> fun.getName().equals("addSchedule"))){
+            System.out.println("addSchedule");
             Struct struct = ResponseHandler.getFunctionCalls(toolRequestResponse).stream().filter(fun -> fun.getName().equals("addSchedule")).findFirst().get()
                     .getArgs();
             addSchedule.addSchedule(addSchedule.structToScheduleList(struct));
@@ -225,7 +230,6 @@ public class PlanPalService {
         }
         toolResponse= ContentMaker
                 .fromMultiModalData(parts.toArray(new Part[0]));
-
 
 
 //        if(toolResponse==null){
@@ -245,5 +249,10 @@ public class PlanPalService {
         return "error";
     }
 
-
+    private Long getMapId(Long chatRoomId){
+        if(mapId==null) {
+            return mapService.getMapInfo(chatRoomId).id();
+        }
+        return mapId;
+    }
 }
