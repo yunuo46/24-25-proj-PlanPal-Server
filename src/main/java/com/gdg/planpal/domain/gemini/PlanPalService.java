@@ -167,17 +167,21 @@ public class PlanPalService {
          */
 
         String finalPrompt= """
-                다음은 여행을 계획하는 사용자의 대화고, 그 뒤는 그에대한 추가 정보야(저장된 데이터, 검색 결과)
-                이를 바탕으로 우린 사용자에게 도움이 될만한 기능을 제공해야해
-                - 여행 장소 리스트에 추가 (addSpotList)
-                    대화에 언급된 장소 이름과 주소를 전부 적어줘
-                - 여행 일정 추가 
-                    사용자의 요청에 의해 일정을 추가 
-                이에 맞는 함수들을 호출해서 기능을 실행시켜줘
-                혹은 이미 이런 일정과 장소 리스트에 대한 정보가 담겨서 아래 응답에 포함되어있을 수 있어.
-                그렇다면 그 내용을 안내하거나, 활용해서 기능들을 실행하면 돼
-                되묻지 말고 필요한 기능들을 바로 실행해줘
-                결과에 대해서 설명해줘
+                This is a conversation between users planning a trip, followed by additional information (such as stored data or search results).
+                Based on this, we need to provide helpful features to the users.
+                
+                Add to Spot List (addSpotList):
+                Extract and list all place names and addresses mentioned in the conversation.
+                
+                Add to Travel Schedule:
+                If the user requests a schedule to be created, add the relevant items accordingly.
+                
+                Call the appropriate functions to execute these features.
+                If the response already includes information about the schedule or spot list, either make use of it to trigger functionality, or explain it to the user.
+                
+                Do not ask follow-up questions — simply execute the necessary features directly.
+                Make sure to explain the results.
+                in english
                 -----------
                 """;
 
