@@ -2,7 +2,6 @@ package com.gdg.planpal.geminiAi.functionCall.Spot;
 
 import com.gdg.planpal.domain.gemini.functionCall.Spot.SpotListRepo;
 import com.gdg.planpal.domain.map.dao.MapPinRepository;
-import com.gdg.planpal.domain.map.domain.MapBoard;
 import com.gdg.planpal.domain.map.domain.pin.MapPin;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

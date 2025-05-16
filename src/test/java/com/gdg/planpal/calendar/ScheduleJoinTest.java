@@ -46,12 +46,11 @@ class ScheduleJoinTest {
     @BeforeEach
     void setup() {
         MapBoard map = mapRepository.save(MapBoard.builder()
-                .centorCoordinates(new Coordinates(2.0, 2.0))
+                .centerCoordinates(new Coordinates(2.0, 2.0))
                 .build());
 
         StarMapPin pin = StarMapPin.builder()
                 .mapBoard(map)
-                .coordinates(new Coordinates(2.0, 2.1))
                 .placeId("test_pid")
                 .content("schedule test")
                 .build();

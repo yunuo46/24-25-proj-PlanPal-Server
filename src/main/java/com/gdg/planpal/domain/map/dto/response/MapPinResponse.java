@@ -1,13 +1,15 @@
 package com.gdg.planpal.domain.map.dto.response;
 
+import com.gdg.planpal.domain.map.domain.Coordinates;
 import com.gdg.planpal.domain.map.domain.pin.MapPin;
 import com.gdg.planpal.domain.map.domain.IconType;
 
 public record MapPinResponse(
         Long id,
-        Long userId,
+        String placeId,
         Double lat,
         Double lng,
+        String userName,
         String title,
         String address,
         String content,
@@ -18,9 +20,10 @@ public record MapPinResponse(
     public static MapPinResponse from(MapPin pin) {
         return new MapPinResponse(
                 pin.getId(),
-                pin.getUser().getId(),
+                pin.getPlaceId(),
                 pin.getCoordinates().getLat(),
                 pin.getCoordinates().getLng(),
+                pin.getUser().getName(),
                 pin.getTitle(),
                 pin.getAddress(),
                 pin.getContent(),

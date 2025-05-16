@@ -15,7 +15,7 @@ steps:
         echo "$$SECRET_ENV_LOCAL" > src/main/resources/secret.yml
     secretEnv: ['SECRET_ENV_LOCAL']
 
-  - name: gradle:7.6-jdk17
+  - name: gradle:8.5-jdk21
     args: [ 'gradle','build' ]
 
   - name: 'gcr.io/cloud-builders/docker'
@@ -72,6 +72,7 @@ steps:
 
 options:
   logging: CLOUD_LOGGING_ONLY
+  machineType: E2_HIGHCPU_8
 
 images:
   - 'asia-northeast3-docker.pkg.dev/gen-lang-client-0798322573/planpal-server/planpal-local'

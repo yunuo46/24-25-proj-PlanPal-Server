@@ -35,20 +35,18 @@ class MapJoinTest {
     @BeforeEach
     void setup() {
         MapBoard map = mapRepository.save(MapBoard.builder()
-                .centorCoordinates(new Coordinates(0.0, 0.0))
+                .centerCoordinates(new Coordinates(0.0, 0.0))
                 .build());
 
         mapPinRepository.saveAll(List.of(
                 HeartMapPin.builder()
                         .mapBoard(map)
-                        .coordinates(new Coordinates(0.1, 0.1))
                         .placeId("p1")
                         .content("heart")
                         .build(),
 
                 StarMapPin.builder()
                         .mapBoard(map)
-                        .coordinates(new Coordinates(0.2, 0.2))
                         .placeId("p2")
                         .content("star")
                         .build()

@@ -6,6 +6,7 @@ import com.gdg.planpal.domain.chatroom.dto.request.ChatRoomJoinRequest;
 import com.gdg.planpal.domain.chatroom.dto.request.ChatRoomUpdateRequest;
 import com.gdg.planpal.domain.chatroom.dto.response.ChatRoomResponse;
 import com.gdg.planpal.domain.chatroom.dto.response.ChatRoomSummaryResponse;
+import com.gdg.planpal.domain.chatroom.dto.response.InviteCodeResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
@@ -69,8 +70,8 @@ public class ChatRoomApi {
 
     @GetMapping("/{chatRoomId}/invite")
     @Operation(summary = "채팅방 초대 코드 조회", description = "참여 중인 채팅방의 초대 코드를 조회합니다.")
-    public ResponseEntity<String> getInviteCode(@AuthenticationPrincipal Long userId,
-                                                @PathVariable Long chatRoomId) {
+    public ResponseEntity<InviteCodeResponse> getInviteCode(@AuthenticationPrincipal Long userId,
+                                                            @PathVariable Long chatRoomId) {
         return ResponseEntity.ok(chatRoomService.getInviteCode(chatRoomId, userId));
     }
 }

@@ -23,7 +23,7 @@ public class StarMapPinFactory implements MapPinFactory{
     }
 
     @Override
-    public MapPin create(MapBoard mapBoard, MapPinRequest request, User user) {
+    public MapPin save(MapBoard mapBoard, MapPinRequest request, User user) {
         Optional<MapPin> existingPinOpt = mapBoard.getPins().stream()
                 .filter(pin -> pin.getPlaceId().equals(request.placeId()))
                 .findFirst();
@@ -39,8 +39,8 @@ public class StarMapPinFactory implements MapPinFactory{
             StarMapPin newPin = StarMapPin.builder()
                     .mapBoard(mapBoard)
                     .user(user)
-                    .coordinates(new Coordinates(request.lat(), request.lng()))
                     .placeId(request.placeId())
+                    .coordinates(new Coordinates(request.lat(),request.lng()))
                     .title(request.title())
                     .address(request.address())
                     .content(request.content())
@@ -59,20 +59,5 @@ public class StarMapPinFactory implements MapPinFactory{
         }else {
             throw new IllegalStateException("HEART 또는 STAR 핀만 허용됩니다.");
         }
-    }
-
-    @Override
-    public MapPin addSchedule(MapPin pin, ScheduleRequest request) {
-        if (!(pin instanceof StarMapPin starPin)) {
-            throw new IllegalArgumentException("Expected StarMapPin");
-        }
-
-        starPin.getSchedules().add(StarMapPinSchedule.builder()
-                .mapPin(starPin)
-                .startTime(request.startTime())
-                .endTime(request.endTime())
-                .build());
-
-        return starPin;
     }
 }

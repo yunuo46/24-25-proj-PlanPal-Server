@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface MapPinRepository extends JpaRepository<MapPin, Long> {
 
@@ -17,7 +18,6 @@ public interface MapPinRepository extends JpaRepository<MapPin, Long> {
         WHERE p.mapBoard.id = :mapBoardId
     """)
     List<StarMapPin> findAllWithSchedulesByMapBoardId(@Param("mapBoardId") Long mapBoardId);
-
-
     List<MapPin> findByMapBoardId(Long mapBoardId);
+    Optional<MapPin> findByMapBoard_ChatRoom_IdAndPlaceId(Long chatRoomId, String placeId);
 }
