@@ -111,7 +111,7 @@ public class PlanPalService {
         // SpotListRepo는 Spring bean이므로 Autowired 받는다고 가정
         String toolRecall = "";
         Content toolResponse=null;
-        if (ResponseHandler.getFunctionCalls(response).stream().anyMatch(fun -> fun.getName().equals("getSpotList"))){
+        if (response!=null && ResponseHandler.getFunctionCalls(response).stream().anyMatch(fun -> fun.getName().equals("getSpotList"))){
 
 
             Map<Long, String> result = spotListRepo.getSpotList(getMapId(chatRoomId));
@@ -121,7 +121,7 @@ public class PlanPalService {
             System.out.println("List to string \n:"+result.toString());
             toolRecall+="users spot List"+result.toString();
         }
-        if (ResponseHandler.getFunctionCalls(response).stream().anyMatch(fun -> fun.getName().equals("getSchedule"))){
+        if (response!=null &&ResponseHandler.getFunctionCalls(response).stream().anyMatch(fun -> fun.getName().equals("getSchedule"))){
 
             String result = scheduleRepo.getSchedule(getMapId(chatRoomId)).stream()
                     .map(StarMapPinSchedule::toString)
@@ -134,7 +134,7 @@ public class PlanPalService {
 //            );
         }
         String searchResult=null;
-        if (ResponseHandler.getFunctionCalls(response).stream().anyMatch(fun -> fun.getName().equals("SearchOnGoogle"))){
+        if (response!=null &&ResponseHandler.getFunctionCalls(response).stream().anyMatch(fun -> fun.getName().equals("SearchOnGoogle"))){
             System.out.println("\n\nGoogle Searching...\n\n");
 
             String googleSearchQuestion = """
@@ -206,18 +206,18 @@ public class PlanPalService {
          */
 
         List<Part> parts = new ArrayList<>();
-        if (ResponseHandler.getFunctionCalls(toolRequestResponse).stream().anyMatch(fun -> fun.getName().equals("addSpotList"))){
+        if (toolRequestResponse!=null&&ResponseHandler.getFunctionCalls(toolRequestResponse).stream().anyMatch(fun -> fun.getName().equals("addSpotList"))){
             System.out.println("addSpotList called");
             Struct struct = ResponseHandler.getFunctionCalls(toolRequestResponse).stream().filter(fun -> fun.getName().equals("addSpotList")).findFirst().get()
                     .getArgs();
-            addSpotList.addSpotList(userId, getMapId(chatRoomId), addSpotList.structToSpotList(struct));
+            addSpotList.addSpotList(userId, chatRoomId, addSpotList.structToSpotList(struct));
             toolResponse= ContentMaker.fromMultiModalData(
                     PartMaker.fromFunctionResponse("addSpotList", Collections.emptyMap())
             );
             parts.add(PartMaker.fromFunctionResponse("addSpotList", Collections.singletonMap("status","success")));
         }
 
-        if (ResponseHandler.getFunctionCalls(toolRequestResponse).stream().anyMatch(fun -> fun.getName().equals("addSchedule"))){
+        if (toolRequestResponse!=null&&ResponseHandler.getFunctionCalls(toolRequestResponse).stream().anyMatch(fun -> fun.getName().equals("addSchedule"))){
             System.out.println("addSchedule");
             Struct struct = ResponseHandler.getFunctionCalls(toolRequestResponse).stream().filter(fun -> fun.getName().equals("addSchedule")).findFirst().get()
                     .getArgs();

@@ -27,7 +27,7 @@ public class AddSpotList {
     private final MapService mapService;
 
 
-    public void addSpotList(String userName, Long mapId, List<Spot> spotList){
+    public void addSpotList(String userName, Long chatRoomId, List<Spot> spotList){
         System.out.println("add spot list function");
         if(spotList==null){
             System.out.println("spotList is null");
@@ -50,7 +50,7 @@ public class AddSpotList {
                 })
                 .map(place->spotToRequest(place))
                 .peek(mapPinRequest->System.out.println("spot name : "+mapPinRequest.title()))
-                .forEach(mapPinRequest -> mapService.savePin(mapId,mapPinRequest,userName));
+                .forEach(mapPinRequest -> mapService.savePin(chatRoomId,mapPinRequest,userName));
 
     }
 
