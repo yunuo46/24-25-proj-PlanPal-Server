@@ -56,15 +56,16 @@ public class AddSpotList {
 
     private MapPinRequest spotToRequest( PlaceInfoDTO placeInfoDTO){
 
-        return new MapPinRequest(placeInfoDTO.getLatitude(),
-                placeInfoDTO.getLongitude()
-                , placeInfoDTO.getName()
+        return new MapPinRequest(
+                placeInfoDTO.getName()
                 , placeInfoDTO.getAddress()
                 ,"content"
                 ,"type"
                 , 5.0
                 , IconType.HEART
                 , placeInfoDTO.getPlaceId()
+                ,placeInfoDTO.getLatitude(),
+                placeInfoDTO.getLongitude()
                 ,null
 
         );
@@ -74,15 +75,16 @@ public class AddSpotList {
 
         return placeInfoDTOs.stream()
                 .map(placeInfoDTO->{
-                    return new MapPinRequest(placeInfoDTO.getLatitude(),
-                            placeInfoDTO.getLongitude()
-                            , placeInfoDTO.getName()
+                    return new MapPinRequest(
+                            placeInfoDTO.getName()
                             , placeInfoDTO.getAddress()
                             ,"content"
                             ,"type"
                             , 5.0
                             , IconType.HEART
                             , placeInfoDTO.getPlaceId()
+                            ,placeInfoDTO.getLatitude()
+                            , placeInfoDTO.getLongitude()
                             ,null
 
                             );
