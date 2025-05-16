@@ -32,6 +32,9 @@ public abstract class MapPin {
     private User user;
 
     @Column(nullable = false)
+    private Coordinates coordinates;
+
+    @Column(nullable = false)
     private String placeId;
 
     @Column(nullable = false)

@@ -75,6 +75,7 @@ class MapPinFactoryTest {
                 4.5,
                 IconType.HEART,
                 "place-123",
+                new Coordinates(37.5665, 126.9780),
                 null
         );
 
@@ -99,6 +100,7 @@ class MapPinFactoryTest {
                 3.7,
                 IconType.STAR,
                 "place-456",
+                new Coordinates(37.5665, 126.9780),
                 schedule
         );
 
@@ -117,7 +119,7 @@ class MapPinFactoryTest {
         // given
         MapPinRequest heartRequest = new MapPinRequest(
                 "제목", "서울시 어딘가", "간단한 설명",
-                "type", 4.5, IconType.HEART, "place-789", null
+                "type", 4.5, IconType.HEART, "place-789", new Coordinates(3.5665, 126.9780),null
         );
         mapService.savePin(mapBoard.getId(), heartRequest, user.getId());
 
@@ -125,7 +127,7 @@ class MapPinFactoryTest {
         ScheduleRequest schedule = new ScheduleRequest(LocalDateTime.now(), LocalDateTime.now().plusHours(2));
         MapPinRequest starRequest = new MapPinRequest(
                 "스케줄 제목", "서울시 어딘가", "변경된 설명",
-                "type", 4.8, IconType.STAR, "place-789", schedule
+                "type", 4.8, IconType.STAR, "place-789", new Coordinates(7.5665, 126.9780),schedule
         );
         mapService.savePin(mapBoard.getId(), starRequest, user.getId());
 
@@ -143,7 +145,7 @@ class MapPinFactoryTest {
         ScheduleRequest schedule1 = new ScheduleRequest(LocalDateTime.now(), LocalDateTime.now().plusHours(1));
         MapPinRequest request1 = new MapPinRequest(
                 "제목", "서울시 어딘가", "설명",
-                "type", 4.0, IconType.STAR, "place-999", schedule1
+                "type", 4.0, IconType.STAR, "place-999", new Coordinates(39.5665, 126.9780),schedule1
         );
         mapService.savePin(mapBoard.getId(), request1, user.getId());
 
@@ -151,7 +153,7 @@ class MapPinFactoryTest {
         ScheduleRequest schedule2 = new ScheduleRequest(LocalDateTime.now().plusHours(2), LocalDateTime.now().plusHours(3));
         MapPinRequest request2 = new MapPinRequest(
                 "제목", "서울시 어딘가", "설명",
-                "type", 4.0, IconType.STAR, "place-999", schedule2
+                "type", 4.0, IconType.STAR, "place-999", new Coordinates(38.5665, 126.9780),schedule2
         );
         mapService.savePin(mapBoard.getId(), request2, user.getId());
 

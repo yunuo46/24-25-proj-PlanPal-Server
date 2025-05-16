@@ -2,7 +2,6 @@ package com.gdg.planpal.domain.schedule.application;
 
 import com.gdg.planpal.domain.map.dto.response.MapPinResponse;
 import com.gdg.planpal.domain.schedule.dao.StarMapPinScheduleRepository;
-import com.gdg.planpal.domain.map.application.factory.MapPinFactoryRouter;
 import com.gdg.planpal.domain.map.dao.MapPinRepository;
 import com.gdg.planpal.domain.map.domain.pin.*;
 import com.gdg.planpal.domain.map.dto.request.ScheduleRequest;
@@ -20,7 +19,6 @@ public class ScheduleService {
 
     private final StarMapPinScheduleRepository scheduleRepository;
     private final MapPinRepository mapPinRepository;
-    private final MapPinFactoryRouter mapPinFactoryRouter;
 
     @Transactional(readOnly = true)
     public List<ScheduleResponse> getSchedulesByMapId(Long mapId) {
