@@ -9,6 +9,9 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
+@Table(
+        uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "chat_room_id"})
+)
 public class UserChatRoom {
 
     @Id
@@ -16,8 +19,10 @@ public class UserChatRoom {
     private Long id;
 
     @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @ManyToOne
+    @JoinColumn(name = "chat_room_id", nullable = false)
     private ChatRoom chatRoom;
 }
