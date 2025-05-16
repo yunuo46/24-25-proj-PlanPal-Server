@@ -1,5 +1,6 @@
 package com.gdg.planpal.domain.schedule.application;
 
+import com.gdg.planpal.domain.map.dto.response.MapPinResponse;
 import com.gdg.planpal.domain.schedule.dao.StarMapPinScheduleRepository;
 import com.gdg.planpal.domain.map.application.factory.MapPinFactoryRouter;
 import com.gdg.planpal.domain.map.dao.MapPinRepository;
@@ -26,9 +27,9 @@ public class ScheduleService {
         return scheduleRepository.findAllByMapId(mapId).stream()
                 .map(schedule -> new ScheduleResponse(
                         schedule.getId(),
-                        schedule.getMapPin().getId(),
                         schedule.getStartTime(),
-                        schedule.getEndTime()
+                        schedule.getEndTime(),
+                        MapPinResponse.from(schedule.getMapPin())
                 ))
                 .toList();
     }
@@ -53,8 +54,13 @@ public class ScheduleService {
         if (pin.getSchedules().isEmpty()) {
             HeartMapPin newHeartPin = HeartMapPin.builder()
                     .mapBoard(pin.getMapBoard())
+                    .user(pin.getUser())
                     .placeId(pin.getPlaceId())
+                    .title(pin.getTitle())
+                    .address(pin.getAddress())
                     .content(pin.getContent())
+                    .type(pin.getType())
+                    .rating(pin.getRating())
                     .build();
             mapPinRepository.delete(pin);
             mapPinRepository.save(newHeartPin);
