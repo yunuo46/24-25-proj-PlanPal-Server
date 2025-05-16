@@ -4,6 +4,7 @@ import com.gdg.planpal.domain.chatroom.application.ChatRoomService;
 import com.gdg.planpal.domain.chatroom.dto.request.ChatRoomCreateRequest;
 import com.gdg.planpal.domain.chatroom.dto.request.ChatRoomJoinRequest;
 import com.gdg.planpal.domain.chatroom.dto.request.ChatRoomUpdateRequest;
+import com.gdg.planpal.domain.chatroom.dto.response.ChatMessageResponse;
 import com.gdg.planpal.domain.chatroom.dto.response.ChatRoomResponse;
 import com.gdg.planpal.domain.chatroom.dto.response.ChatRoomSummaryResponse;
 import com.gdg.planpal.domain.chatroom.dto.response.InviteCodeResponse;
@@ -43,6 +44,12 @@ public class ChatRoomApi {
     public ResponseEntity<ChatRoomResponse> join(@AuthenticationPrincipal Long userId,
                                                  @RequestBody ChatRoomJoinRequest request) {
         return ResponseEntity.ok(chatRoomService.joinChatRoom(request, userId));
+    }
+
+    @GetMapping("/{chatRoomId}/messages")
+    @Operation(summary = "채팅방 메세지 조회", description = "채팅방에 입장 시 필요한 정보(유저 및 메세지)를 조회합니다.")
+    public ResponseEntity<List<ChatMessageResponse>> getChatInfo(@PathVariable Long chatRoomId) {
+        return ResponseEntity.ok(chatRoomService.getChatInfo(chatRoomId));
     }
 
     @GetMapping("/{chatRoomId}")

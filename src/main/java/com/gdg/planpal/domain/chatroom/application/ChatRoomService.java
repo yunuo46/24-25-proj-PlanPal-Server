@@ -1,12 +1,15 @@
 package com.gdg.planpal.domain.chatroom.application;
 
+import com.gdg.planpal.domain.chatroom.dao.ChatMessageRepository;
 import com.gdg.planpal.domain.chatroom.dao.ChatRoomRepository;
 import com.gdg.planpal.domain.chatroom.dao.UserChatRoomRepository;
+import com.gdg.planpal.domain.chatroom.domain.ChatMessage;
 import com.gdg.planpal.domain.chatroom.domain.ChatRoom;
 import com.gdg.planpal.domain.chatroom.domain.UserChatRoom;
 import com.gdg.planpal.domain.chatroom.dto.request.ChatRoomCreateRequest;
 import com.gdg.planpal.domain.chatroom.dto.request.ChatRoomJoinRequest;
 import com.gdg.planpal.domain.chatroom.dto.request.ChatRoomUpdateRequest;
+import com.gdg.planpal.domain.chatroom.dto.response.ChatMessageResponse;
 import com.gdg.planpal.domain.chatroom.dto.response.ChatRoomResponse;
 import com.gdg.planpal.domain.chatroom.dto.response.ChatRoomSummaryResponse;
 import com.gdg.planpal.domain.chatroom.dto.response.InviteCodeResponse;
@@ -31,6 +34,7 @@ public class ChatRoomService {
     private final UserChatRoomRepository userChatRoomRepository;
     private final UserRepository userRepository;
     private final MapRepository mapRepository;
+    private final ChatMessageRepository chatMessageRepository;
 
     @Transactional(readOnly = true)
     public List<ChatRoomSummaryResponse> getAllSummariesByUser(Long userId) {
@@ -143,5 +147,19 @@ public class ChatRoomService {
 
     private String generateInviteCode() {
         return UUID.randomUUID().toString().substring(0, 8);
+    }
+
+    public List<ChatMessageResponse> getChatInfo(Long chatRoomId) {
+        List<ChatMessage> messages = chatMessageRepository.findByRoomId(chatRoomId.toString())
+                .collectList()
+                .block();
+
+        if (messages == null) {
+            return List.of(); // 조회된 메시지가 없으면 빈 리스트 반환
+        }
+
+        return messages.stream()
+                .map(ChatMessageResponse::from)
+                .toList();
     }
 }
