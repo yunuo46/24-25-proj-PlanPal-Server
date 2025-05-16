@@ -15,7 +15,7 @@ steps:
       - '-c'
       - |
         echo "$$SECRET_ENV_LOCAL" > src/main/resources/secret.yml
-        printf "%b" "$$SECRET_ENV_AI" > src/main/resources/gemini-ai-key.json
+        echo "$$SECRET_ENV_AI" > src/main/resources/gemini-ai-key.json
     secretEnv: ['SECRET_ENV_LOCAL', 'SECRET_ENV_AI']
 
   - name: gradle:8.5-jdk21
@@ -48,7 +48,7 @@ steps:
       - '-c'
       - |
         echo "$$SECRET_ENV_REMOTE" > src/main/resources/secret.yml
-        printf "%b" "$$SECRET_ENV_AI" > src/main/resources/gemini-ai-key.json
+        echo "$$SECRET_ENV_AI" > src/main/resources/gemini-ai-key.json
     secretEnv: ['SECRET_ENV_REMOTE', 'SECRET_ENV_AI']
 
   - name: gradle:7.6-jdk17
