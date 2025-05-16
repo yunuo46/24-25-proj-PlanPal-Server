@@ -1,5 +1,6 @@
 package com.gdg.planpal.domain.schedule.application;
 
+import com.gdg.planpal.domain.map.domain.Coordinates;
 import com.gdg.planpal.domain.map.dto.response.MapPinResponse;
 import com.gdg.planpal.domain.schedule.dao.StarMapPinScheduleRepository;
 import com.gdg.planpal.domain.map.dao.MapPinRepository;
@@ -56,6 +57,7 @@ public class ScheduleService {
                     .title(pin.getTitle())
                     .address(pin.getAddress())
                     .content(pin.getContent())
+                    .coordinates(pin.getCoordinates())
                     .type(pin.getType())
                     .rating(pin.getRating())
                     .build();

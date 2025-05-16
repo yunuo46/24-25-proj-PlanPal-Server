@@ -10,7 +10,7 @@ spring:
     vertex:
       ai:
         gemini:
-          project-id: "gemini-ai-455106"
+          project-id: "gen-lang-client-0798322573"
           location: "us-central1"
           chat:
             options:

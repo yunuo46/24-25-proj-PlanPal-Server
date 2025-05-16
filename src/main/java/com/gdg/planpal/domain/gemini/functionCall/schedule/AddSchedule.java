@@ -1,26 +1,57 @@
 package com.gdg.planpal.domain.gemini.functionCall.schedule;
 
+import com.gdg.planpal.domain.map.application.MapService;
+import com.gdg.planpal.domain.map.dao.MapPinRepository;
+import com.gdg.planpal.domain.map.domain.IconType;
+import com.gdg.planpal.domain.map.domain.pin.MapPin;
+import com.gdg.planpal.domain.map.dto.request.MapPinRequest;
+import com.gdg.planpal.domain.map.dto.request.ScheduleRequest;
+import com.gdg.planpal.domain.schedule.application.ScheduleService;
 import com.google.cloud.vertexai.api.FunctionDeclaration;
 import com.google.cloud.vertexai.api.Schema;
 import com.google.cloud.vertexai.api.Type;
 import com.google.protobuf.Struct;
 import com.google.protobuf.Value;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Component
+@RequiredArgsConstructor
 public class AddSchedule {
-    public void addSchedule(List<Schedule> scheduleList){
+    private final MapService mapService;
+    private final MapPinRepository mapPinRepository;
+    public void addSchedule(Long chatroomId,List<Schedule> scheduleList,String userId){
         System.out.println("add Schedule function called");
         System.out.println("--------scheduleList---------");
         for(Schedule schedule:scheduleList){
             System.out.println("["+schedule.spotName+"]"+schedule.startDate+":"+schedule.startTime+"~"+schedule.endDate+":"+schedule.endTime);
-
         }
-
         System.out.println("--------scheduleList end---------");
+
+        scheduleList.stream()
+                .map(schedule->{
+                    MapPin mapPin = mapPinRepository.findById(schedule.getSpotId()).orElse(null);
+                    if(mapPin!=null){
+                        System.out.println("schedule add error : pin id does not exist");
+                    }
+                            return new MapPinRequest(
+                                    mapPin.getTitle()
+                                    ,mapPin.getAddress()
+                                    ,mapPin.getContent()
+                                    ,mapPin.getType()
+                                    ,mapPin.getRating()
+                                    , IconType.STAR
+                                    ,mapPin.getPlaceId()
+                                    ,mapPin.getCoordinates().getLat()
+                                    ,mapPin.getCoordinates().getLng()
+
+                                    ,new ScheduleRequest(schedule.getStartDateTime()
+                                    ,schedule.getEndDateTime())
+                            )   ;
+                }).forEach(mapPinRequest -> mapService.savePin(chatroomId,mapPinRequest,userId));
 
     }
     public FunctionDeclaration getFunctionDeclaration() {

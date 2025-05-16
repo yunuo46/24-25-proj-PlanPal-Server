@@ -225,7 +225,7 @@ public class PlanPalService {
             System.out.println("addSchedule");
             Struct struct = ResponseHandler.getFunctionCalls(toolRequestResponse).stream().filter(fun -> fun.getName().equals("addSchedule")).findFirst().get()
                     .getArgs();
-            addSchedule.addSchedule(addSchedule.structToScheduleList(struct));
+            addSchedule.addSchedule(chatRoomId,addSchedule.structToScheduleList(struct),userId);
             parts.add(PartMaker.fromFunctionResponse("addSchedule", Collections.singletonMap("status","success")));
 
         }
@@ -244,7 +244,7 @@ public class PlanPalService {
             GenerateContentResponse finalResponse = functionChat.sendMessage(toolResponse);
             System.out.println("result answer : \n"+ResponseHandler.getText(finalResponse));
             System.out.println("toolRequestResponse:"+ResponseHandler.getText(toolRequestResponse));
-            return ResponseHandler.getText(finalResponse);
+            return searchResult+ResponseHandler.getText(finalResponse);
 
         } catch (Exception e) {
             System.out.println("error(2)" + e);
