@@ -19,10 +19,10 @@ public class ScheduleApi {
 
     private final ScheduleService scheduleService;
 
-    @GetMapping("/maps/{mapId}")
+    @GetMapping("/maps/{chatRoomId}")
     @Operation(summary = "스케쥴 목록 조회", description = "맵 ID를 기준으로 해당 맵에 속한 모든 스케쥴을 조회합니다.")
-    public List<ScheduleResponse> getSchedules(@PathVariable Long mapId) {
-        return scheduleService.getSchedulesByMapId(mapId);
+    public List<ScheduleResponse> getSchedules(@PathVariable Long chatRoomId) {
+        return scheduleService.getSchedulesByChatRoomId(chatRoomId);
     }
 
     @PutMapping("/{scheduleId}")

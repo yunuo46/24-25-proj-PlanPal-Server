@@ -21,8 +21,8 @@ public class ScheduleService {
     private final MapPinRepository mapPinRepository;
 
     @Transactional(readOnly = true)
-    public List<ScheduleResponse> getSchedulesByMapId(Long mapId) {
-        return scheduleRepository.findAllByMapId(mapId).stream()
+    public List<ScheduleResponse> getSchedulesByChatRoomId(Long chatRoomId) {
+        return scheduleRepository.findAllByChatRoomId(chatRoomId).stream()
                 .map(schedule -> new ScheduleResponse(
                         schedule.getId(),
                         schedule.getStartTime(),
@@ -31,7 +31,6 @@ public class ScheduleService {
                 ))
                 .toList();
     }
-
 
     @Transactional
     public void updateSchedule(Long scheduleId, ScheduleRequest request) {

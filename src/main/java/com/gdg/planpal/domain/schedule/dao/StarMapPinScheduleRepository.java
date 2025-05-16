@@ -13,4 +13,12 @@ public interface StarMapPinScheduleRepository extends JpaRepository<StarMapPinSc
         WHERE p.mapBoard.id = :mapId
     """)
     List<StarMapPinSchedule> findAllByMapId(Long mapId);
+    @Query("""
+        SELECT s FROM StarMapPinSchedule s
+        JOIN FETCH s.mapPin p
+        JOIN p.mapBoard b
+        JOIN b.chatRoom c
+        WHERE c.id = :chatRoomId
+    """)
+    List<StarMapPinSchedule> findAllByChatRoomId(Long chatRoomId);
 }
