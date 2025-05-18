@@ -11,6 +11,7 @@ import com.google.cloud.vertexai.api.*;
 import com.google.cloud.vertexai.generativeai.*;
 import com.google.protobuf.Struct;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +23,7 @@ import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class PlanPalService {
 
 
@@ -104,7 +106,9 @@ public class PlanPalService {
         } catch (Exception e) {
             System.out.println("error(1)" + e);
         }
-
+        if(response==null){
+            return "ai 연결에 문제가 있습니다. ai 모델 응답이 없습니다";
+        }
         /**
          * 2) 추가 정보 요청 처리
          */
@@ -112,21 +116,31 @@ public class PlanPalService {
         String toolRecall = "";
         Content toolResponse=null;
         if (response!=null && ResponseHandler.getFunctionCalls(response).stream().anyMatch(fun -> fun.getName().equals("getSpotList"))){
-
-
-            Map<Long, String> result = spotListRepo.getSpotList(getMapId(chatRoomId));
+            Map<Long, String> result=Map.of();
+            try {
+                result = spotListRepo.getSpotList(getMapId(chatRoomId));
 //            toolResponse= ContentMaker.fromMultiModalData(
 //                    PartMaker.fromFunctionResponse("getSpotList", Collections.singletonMap("current spot list", result.get("spot-address")))
 //            );
+            }catch (Exception e){
+                log.error("get spot list error : "+e.getMessage());
+            }
             System.out.println("List to string \n:"+result.toString());
             toolRecall+="users spot List"+result.toString();
         }
-        if (response!=null &&ResponseHandler.getFunctionCalls(response).stream().anyMatch(fun -> fun.getName().equals("getSchedule"))){
 
-            String result = scheduleRepo.getSchedule(getMapId(chatRoomId)).stream()
-                    .map(StarMapPinSchedule::toString)
-                    .reduce((s1,s2)->s1+"\n"+s2)
-                    .orElse("일정 아직 없음");
+        if (response!=null &&ResponseHandler.getFunctionCalls(response).stream().anyMatch(fun -> fun.getName().equals("getSchedule"))){
+            String result = "";
+
+            try {
+                result = scheduleRepo.getSchedule(getMapId(chatRoomId)).stream()
+                        .map(StarMapPinSchedule::toString)
+                        .reduce((s1, s2) -> s1 + "\n" + s2)
+                        .orElse("일정 아직 없음");
+            }catch(Exception e){
+                log.error("get schedule error : "+e.getMessage());
+            }
+
             System.out.println("List to string \n:"+result);
             toolRecall+="users schedule in trip"+result;
 //            toolResponse= ContentMaker.fromMultiModalData(
@@ -143,20 +157,14 @@ public class PlanPalService {
                     If the user asks directly about a place, or requests help finding related places,
                     list relevant information based on the place name, the exact address as it appears on Google Maps, and description. in English\n
                     """;
-            searchResult=geminiRestService.chatWithDynamicSearch(googleSearchQuestion+prompt+toolRecall,0.1).block();
-            System.out.println("google search result"+searchResult);
-
-
             try {
-                //response = chat.sendMessage(searchResult);
-
-
-            }catch (Exception e) {
-                System.out.println("error(3)" + e);
+                searchResult = geminiRestService.chatWithDynamicSearch(googleSearchQuestion + prompt + toolRecall, 0.1).block();
+            }catch(Exception e ){
+                log.error("google search : "+ e.getMessage());
             }
 
-        }else{
 
+            System.out.println("google search result"+searchResult);
 
 
         }
@@ -167,20 +175,19 @@ public class PlanPalService {
          */
 
         String finalPrompt= """
-                This is a conversation between users planning a trip, followed by additional information (such as stored data or search results).
-                Based on this, we need to provide helpful features to the users.
+                This is a conversation between users planning a trip, followed by additional information such as stored data or search results. Your role is to help them by understanding their intentions and providing meaningful responses.
                 
-                Add to Spot List (addSpotList):
-                Extract and list all place names and addresses mentioned in the conversation.
+                Main Goals:
+                - If users mention locations or places of interest, identify and extract them. Add them to the spot list when appropriate.
+                - If users request a travel schedule or itinerary, help construct one based on the mentioned locations, times, or preferences.
+                - When possible, call the relevant functions such as `addSpotList` or `addSchedule`. If you're not sure, provide helpful suggestions or explanations instead.
+                - When user intent is unclear or partially expressed, use your best judgment to make reasonable assumptions and proceed accordingly.
+                - If the conversation already includes schedule or location information, utilize it to assist the user, even if they didn’t give a direct command.
+                - Don’t ask for additional clarification unless absolutely necessary. Prioritize action and helpfulness.
+                - If you don’t have user data or function access, explain what would happen or give users advice based on the available information.
                 
-                Add to Travel Schedule:
-                If the user requests a schedule to be created, add the relevant items accordingly.
+                Be helpful, flexible, and proactive — your goal is to support the trip planning experience smoothly.
                 
-                Call the appropriate functions to execute these features.
-                If the response already includes information about the schedule or spot list, either make use of it to trigger functionality, or explain it to the user.
-                
-                Do not ask follow-up questions — simply execute the necessary features directly.
-                Make sure to explain the results.
                 in english
                 -----------
                 """;
@@ -214,7 +221,11 @@ public class PlanPalService {
             System.out.println("addSpotList called");
             Struct struct = ResponseHandler.getFunctionCalls(toolRequestResponse).stream().filter(fun -> fun.getName().equals("addSpotList")).findFirst().get()
                     .getArgs();
-            addSpotList.addSpotList(userId, chatRoomId, addSpotList.structToSpotList(struct));
+            try {
+                addSpotList.addSpotList(userId, getMapId(chatRoomId), addSpotList.structToSpotList(struct));
+            }catch(Exception e ){
+                log.error("addSpotList error : "+ e.getMessage());
+            }
             toolResponse= ContentMaker.fromMultiModalData(
                     PartMaker.fromFunctionResponse("addSpotList", Collections.emptyMap())
             );
@@ -225,7 +236,11 @@ public class PlanPalService {
             System.out.println("addSchedule");
             Struct struct = ResponseHandler.getFunctionCalls(toolRequestResponse).stream().filter(fun -> fun.getName().equals("addSchedule")).findFirst().get()
                     .getArgs();
-            addSchedule.addSchedule(chatRoomId,addSchedule.structToScheduleList(struct),userId);
+            try {
+                addSchedule.addSchedule(getMapId(chatRoomId), addSchedule.structToScheduleList(struct), userId);
+            }catch(Exception e ){
+                log.error("addSchedule error : "+ e.getMessage());
+            }
             parts.add(PartMaker.fromFunctionResponse("addSchedule", Collections.singletonMap("status","success")));
 
         }
@@ -254,8 +269,13 @@ public class PlanPalService {
     }
 
     private Long getMapId(Long chatRoomId){
-        if(mapId==null) {
-            return mapService.getMapInfo(chatRoomId).id();
+        if(this.mapId==null) {
+            try {
+                return mapService.getMapInfo(chatRoomId).id();
+            } catch (RuntimeException e) {
+                log.error("getMapId error : "+ e.getMessage());
+                return null;
+            }
         }
         return mapId;
     }
