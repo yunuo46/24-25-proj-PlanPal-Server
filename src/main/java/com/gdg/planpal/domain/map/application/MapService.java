@@ -43,7 +43,7 @@ public class MapService {
     @Transactional
     public void savePin(Long mapId, MapPinRequest request, String userName){
         User user = userRepository.findByName(userName)
-                .orElseThrow(() -> new IllegalArgumentException("Map not found with id: " + mapId));
+                .orElseThrow(() -> new IllegalArgumentException("Map not found with user Name: " + userName));
 
         savePin(mapId,request,user.getId());
     }

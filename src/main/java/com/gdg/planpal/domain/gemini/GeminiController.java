@@ -17,7 +17,7 @@ public class GeminiController {
     private final PlanPalService planPalService;
 
     @GetMapping("/ai-message")
-    public String planPal_chat(@RequestParam Long chatRoomId,@RequestParam String prompt, @AuthenticationPrincipal String userName) {
+    public String planPal_chat(@RequestParam Long chatRoomId,@RequestParam String prompt, @RequestParam String userName) {
         return planPalService.chat(userName,chatRoomId,prompt);
     }
 

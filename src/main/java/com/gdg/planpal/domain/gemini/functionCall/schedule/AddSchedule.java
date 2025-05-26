@@ -23,7 +23,7 @@ import java.util.List;
 public class AddSchedule {
     private final MapService mapService;
     private final MapPinRepository mapPinRepository;
-    public void addSchedule(Long mapId,List<Schedule> scheduleList,String userId){
+    public void addSchedule(Long mapId,List<Schedule> scheduleList,String userName){
         System.out.println("add Schedule function called");
         System.out.println("--------scheduleList---------");
         for(Schedule schedule:scheduleList){
@@ -51,7 +51,7 @@ public class AddSchedule {
                                     ,new ScheduleRequest(schedule.getStartDateTime()
                                     ,schedule.getEndDateTime())
                             )   ;
-                }).forEach(mapPinRequest -> mapService.savePin(mapId,mapPinRequest,userId));
+                }).forEach(mapPinRequest -> mapService.savePin(mapId,mapPinRequest,userName));
 
     }
     public FunctionDeclaration getFunctionDeclaration() {

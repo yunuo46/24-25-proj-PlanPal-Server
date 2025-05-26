@@ -41,7 +41,7 @@ public class PlanPalService {
     private final AddSchedule addSchedule;
     private final MapService mapService;
     private Long mapId; ;
-    public String chat(String userId,Long chatRoomId, String prompt) {
+    public String chat(String userName,Long chatRoomId, String prompt) {
 
 
 
@@ -222,7 +222,7 @@ public class PlanPalService {
             Struct struct = ResponseHandler.getFunctionCalls(toolRequestResponse).stream().filter(fun -> fun.getName().equals("addSpotList")).findFirst().get()
                     .getArgs();
             try {
-                addSpotList.addSpotList(userId, getMapId(chatRoomId), addSpotList.structToSpotList(struct));
+                addSpotList.addSpotList(userName, getMapId(chatRoomId), addSpotList.structToSpotList(struct));
             }catch(Exception e ){
                 log.error("addSpotList error : "+ e.getMessage());
             }
@@ -237,7 +237,7 @@ public class PlanPalService {
             Struct struct = ResponseHandler.getFunctionCalls(toolRequestResponse).stream().filter(fun -> fun.getName().equals("addSchedule")).findFirst().get()
                     .getArgs();
             try {
-                addSchedule.addSchedule(getMapId(chatRoomId), addSchedule.structToScheduleList(struct), userId);
+                addSchedule.addSchedule(getMapId(chatRoomId), addSchedule.structToScheduleList(struct), userName);
             }catch(Exception e ){
                 log.error("addSchedule error : "+ e.getMessage());
             }
