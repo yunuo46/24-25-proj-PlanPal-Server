@@ -23,7 +23,7 @@ public class StarMapPinFactory implements MapPinFactory{
     }
 
     @Override
-    public MapPin save(MapBoard mapBoard, MapPinRequest request, User user) {
+    public MapPin create(MapBoard mapBoard, MapPinRequest request, User user) {
         Optional<MapPin> existingPinOpt = mapBoard.getPins().stream()
                 .filter(pin -> pin.getPlaceId().equals(request.placeId()))
                 .findFirst();

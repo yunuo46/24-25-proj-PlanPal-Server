@@ -20,7 +20,7 @@ public class HeartMapPinFactory implements MapPinFactory{
     }
 
     @Override
-    public MapPin save(MapBoard mapBoard, MapPinRequest request, User user) {
+    public MapPin create(MapBoard mapBoard, MapPinRequest request, User user) {
         return HeartMapPin.builder()
                 .mapBoard(mapBoard)
                 .user(user)

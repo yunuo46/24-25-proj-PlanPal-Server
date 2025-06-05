@@ -9,5 +9,5 @@ import com.gdg.planpal.domain.user.domain.User;
 
 public interface MapPinFactory {
     IconType mapPinType();
-    MapPin save(MapBoard mapBoard, MapPinRequest request, User user);
+    MapPin create(MapBoard mapBoard, MapPinRequest request, User user);
 }

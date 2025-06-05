@@ -25,6 +25,6 @@ public class MapPinFactoryRouter {
 
     public MapPin save(MapBoard mapBoard, MapPinRequest request, User user) {
         MapPinFactory factory = factories.get(request.iconType());
-        return factory.save(mapBoard, request, user);
+        return factory.create(mapBoard, request, user);
     }
 }
