@@ -43,4 +43,3 @@ public abstract class MapPin {
 
     public abstract IconType getIconType();
 }
-
