@@ -1,11 +1,13 @@
 package com.gdg.planpal.domain.schedule.application;
 
+import com.gdg.planpal.domain.map.domain.Coordinates;
+import com.gdg.planpal.domain.map.dto.response.MapPinResponse;
 import com.gdg.planpal.domain.schedule.dao.StarMapPinScheduleRepository;
-import com.gdg.planpal.domain.map.application.factory.MapPinFactoryRouter;
 import com.gdg.planpal.domain.map.dao.MapPinRepository;
 import com.gdg.planpal.domain.map.domain.pin.*;
 import com.gdg.planpal.domain.map.dto.request.ScheduleRequest;
 import com.gdg.planpal.domain.schedule.domain.StarMapPinSchedule;
+import com.gdg.planpal.domain.schedule.dto.response.ScheduleResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,24 +20,17 @@ public class ScheduleService {
 
     private final StarMapPinScheduleRepository scheduleRepository;
     private final MapPinRepository mapPinRepository;
-    private final MapPinFactoryRouter mapPinFactoryRouter;
 
     @Transactional(readOnly = true)
-    public List<StarMapPinSchedule> getSchedulesByMapId(Long mapId) {
-        return scheduleRepository.findAllByMapId(mapId);
-    }
-
-    @Transactional
-    public void addSchedule(Long pinId, ScheduleRequest request) {
-        MapPin pin = mapPinRepository.findById(pinId)
-                .orElseThrow(() -> new IllegalArgumentException("MapPin not found"));
-
-        MapPin result = mapPinFactoryRouter.addSchedule(pin, request);
-
-        if (!result.getId().equals(pin.getId())) {
-            mapPinRepository.delete(pin);
-        }
-        mapPinRepository.save(result);
+    public List<ScheduleResponse> getSchedulesByChatRoomId(Long chatRoomId) {
+        return scheduleRepository.findAllByChatRoomId(chatRoomId).stream()
+                .map(schedule -> new ScheduleResponse(
+                        schedule.getId(),
+                        schedule.getStartTime(),
+                        schedule.getEndTime(),
+                        MapPinResponse.from(schedule.getMapPin())
+                ))
+                .toList();
     }
 
     @Transactional
@@ -57,9 +52,14 @@ public class ScheduleService {
         if (pin.getSchedules().isEmpty()) {
             HeartMapPin newHeartPin = HeartMapPin.builder()
                     .mapBoard(pin.getMapBoard())
-                    .coordinates(pin.getCoordinates())
+                    .user(pin.getUser())
                     .placeId(pin.getPlaceId())
+                    .title(pin.getTitle())
+                    .address(pin.getAddress())
                     .content(pin.getContent())
+                    .coordinates(pin.getCoordinates())
+                    .type(pin.getType())
+                    .rating(pin.getRating())
                     .build();
             mapPinRepository.delete(pin);
             mapPinRepository.save(newHeartPin);

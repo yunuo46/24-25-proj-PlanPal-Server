@@ -4,8 +4,7 @@ import com.gdg.planpal.domain.map.domain.IconType;
 import com.gdg.planpal.domain.map.domain.MapBoard;
 import com.gdg.planpal.domain.map.domain.pin.MapPin;
 import com.gdg.planpal.domain.map.dto.request.MapPinRequest;
-
-import com.gdg.planpal.domain.map.dto.request.ScheduleRequest;
+import com.gdg.planpal.domain.user.domain.User;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,13 +23,8 @@ public class MapPinFactoryRouter {
                 ));
     }
 
-    public MapPin create(MapBoard mapBoard, MapPinRequest request) {
+    public MapPin save(MapBoard mapBoard, MapPinRequest request, User user) {
         MapPinFactory factory = factories.get(request.iconType());
-        return factory.create(mapBoard, request);
-    }
-
-    public MapPin addSchedule(MapPin pin, ScheduleRequest request) {
-        MapPinFactory factory = factories.get(pin.getIconType());
-        return factory.addSchedule(pin, request);
+        return factory.create(mapBoard, request, user);
     }
 }

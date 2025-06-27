@@ -7,6 +7,8 @@ import com.gdg.planpal.domain.map.domain.pin.MapPin;
 import com.gdg.planpal.domain.map.application.factory.MapPinFactoryRouter;
 import com.gdg.planpal.domain.map.dto.request.MapPinRequest;
 import com.gdg.planpal.domain.map.dto.response.MapResponse;
+import com.gdg.planpal.domain.user.dao.UserRepository;
+import com.gdg.planpal.domain.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +19,7 @@ public class MapService {
     private final MapRepository mapRepository;
     private final MapPinRepository mapPinRepository;
     private final MapPinFactoryRouter mapPinFactoryRouter;
+    private final UserRepository userRepository;
 
     @Transactional(readOnly = true)
     public MapResponse getMapInfo(Long chatRoomId) {
@@ -27,22 +30,28 @@ public class MapService {
     }
 
     @Transactional
-    public void savePin(Long mapId, MapPinRequest request) {
-        MapBoard mapBoard = mapRepository.findById(mapId)
-                .orElseThrow(() -> new IllegalArgumentException("Map not found with id: " + mapId));
+    public void savePin(Long chatroomId, MapPinRequest request, Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User not found for userId: " + userId));
 
-        MapPin pin = mapPinFactoryRouter.create(mapBoard, request);
+        MapBoard mapBoard = mapRepository.findWithPinsByChatRoomId(chatroomId)
+                .orElseThrow(() -> new IllegalArgumentException("Map not found with chatroom_id: " + chatroomId));
+
+        MapPin pin = mapPinFactoryRouter.save(mapBoard, request, user);
         mapPinRepository.save(pin);
+    }
+    @Transactional
+    public void savePin(Long mapId, MapPinRequest request, String userName){
+        User user = userRepository.findByName(userName)
+                .orElseThrow(() -> new IllegalArgumentException("Map not found with user Name: " + userName));
+
+        savePin(mapId,request,user.getId());
     }
 
     @Transactional
-    public void deletePin(Long mapId, Long pinId) {
-        MapPin pin = mapPinRepository.findById(pinId)
-                .orElseThrow(() -> new IllegalArgumentException("MapPin not found with id: " + pinId));
-
-        if (!pin.getMapBoard().getId().equals(mapId)) {
-            throw new IllegalArgumentException("MapPin does not belong to the specified Map");
-        }
+    public void deletePin(Long chatroomId, String placeId) {
+        MapPin pin = mapPinRepository.findByMapBoard_ChatRoom_IdAndPlaceId(chatroomId, placeId)
+                .orElseThrow(() -> new IllegalArgumentException("MapPin not found with placeId: " + placeId + " in chatRoomId: " + chatroomId));
 
         mapPinRepository.delete(pin);
     }

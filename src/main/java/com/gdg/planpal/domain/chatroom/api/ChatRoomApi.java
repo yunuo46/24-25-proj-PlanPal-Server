@@ -4,9 +4,12 @@ import com.gdg.planpal.domain.chatroom.application.ChatRoomService;
 import com.gdg.planpal.domain.chatroom.dto.request.ChatRoomCreateRequest;
 import com.gdg.planpal.domain.chatroom.dto.request.ChatRoomJoinRequest;
 import com.gdg.planpal.domain.chatroom.dto.request.ChatRoomUpdateRequest;
+import com.gdg.planpal.domain.chatroom.dto.response.ChatMessageResponse;
 import com.gdg.planpal.domain.chatroom.dto.response.ChatRoomResponse;
 import com.gdg.planpal.domain.chatroom.dto.response.ChatRoomSummaryResponse;
+import com.gdg.planpal.domain.chatroom.dto.response.InviteCodeResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -17,6 +20,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/chat-rooms")
 @RequiredArgsConstructor
+@SecurityRequirement(name = "accessToken")
 public class ChatRoomApi {
 
     private final ChatRoomService chatRoomService;
@@ -24,6 +28,7 @@ public class ChatRoomApi {
     @GetMapping
     @Operation(summary = "채팅방 요약 목록 조회", description = "유저가 참여 중인 채팅방들의 요약 정보를 조회합니다.")
     public ResponseEntity<List<ChatRoomSummaryResponse>> list(@AuthenticationPrincipal Long userId) {
+        System.out.println("userId = " + userId);
         return ResponseEntity.ok(chatRoomService.getAllSummariesByUser(userId));
     }
 
@@ -39,6 +44,12 @@ public class ChatRoomApi {
     public ResponseEntity<ChatRoomResponse> join(@AuthenticationPrincipal Long userId,
                                                  @RequestBody ChatRoomJoinRequest request) {
         return ResponseEntity.ok(chatRoomService.joinChatRoom(request, userId));
+    }
+
+    @GetMapping("/{chatRoomId}/messages")
+    @Operation(summary = "채팅방 메세지 조회", description = "채팅방에 입장 시 필요한 정보(유저 및 메세지)를 조회합니다.")
+    public ResponseEntity<List<ChatMessageResponse>> getChatInfo(@PathVariable Long chatRoomId) {
+        return ResponseEntity.ok(chatRoomService.getChatInfo(chatRoomId));
     }
 
     @GetMapping("/{chatRoomId}")
@@ -66,8 +77,8 @@ public class ChatRoomApi {
 
     @GetMapping("/{chatRoomId}/invite")
     @Operation(summary = "채팅방 초대 코드 조회", description = "참여 중인 채팅방의 초대 코드를 조회합니다.")
-    public ResponseEntity<String> getInviteCode(@AuthenticationPrincipal Long userId,
-                                                @PathVariable Long chatRoomId) {
+    public ResponseEntity<InviteCodeResponse> getInviteCode(@AuthenticationPrincipal Long userId,
+                                                            @PathVariable Long chatRoomId) {
         return ResponseEntity.ok(chatRoomService.getInviteCode(chatRoomId, userId));
     }
 }

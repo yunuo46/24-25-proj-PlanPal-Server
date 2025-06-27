@@ -1,14 +1,18 @@
 package com.gdg.planpal.domain.chatroom.application;
 
+import com.gdg.planpal.domain.chatroom.dao.ChatMessageRepository;
 import com.gdg.planpal.domain.chatroom.dao.ChatRoomRepository;
 import com.gdg.planpal.domain.chatroom.dao.UserChatRoomRepository;
+import com.gdg.planpal.domain.chatroom.domain.ChatMessage;
 import com.gdg.planpal.domain.chatroom.domain.ChatRoom;
 import com.gdg.planpal.domain.chatroom.domain.UserChatRoom;
 import com.gdg.planpal.domain.chatroom.dto.request.ChatRoomCreateRequest;
 import com.gdg.planpal.domain.chatroom.dto.request.ChatRoomJoinRequest;
 import com.gdg.planpal.domain.chatroom.dto.request.ChatRoomUpdateRequest;
+import com.gdg.planpal.domain.chatroom.dto.response.ChatMessageResponse;
 import com.gdg.planpal.domain.chatroom.dto.response.ChatRoomResponse;
 import com.gdg.planpal.domain.chatroom.dto.response.ChatRoomSummaryResponse;
+import com.gdg.planpal.domain.chatroom.dto.response.InviteCodeResponse;
 import com.gdg.planpal.domain.map.dao.MapRepository;
 import com.gdg.planpal.domain.map.domain.Coordinates;
 import com.gdg.planpal.domain.map.domain.MapBoard;
@@ -30,6 +34,7 @@ public class ChatRoomService {
     private final UserChatRoomRepository userChatRoomRepository;
     private final UserRepository userRepository;
     private final MapRepository mapRepository;
+    private final ChatMessageRepository chatMessageRepository;
 
     @Transactional(readOnly = true)
     public List<ChatRoomSummaryResponse> getAllSummariesByUser(Long userId) {
@@ -56,7 +61,7 @@ public class ChatRoomService {
 
         MapBoard mapBoard = MapBoard.builder()
                 .chatRoom(chatRoom)
-                .centorCoordinates(request.coordinates()) // 초기 좌표, 나중에 수정 가능
+                .centerCoordinates(request.coordinates()) // 초기 좌표, 나중에 수정 가능
                 .build();
         mapRepository.save(mapBoard);
 
@@ -105,6 +110,7 @@ public class ChatRoomService {
 
         if (room.getOwner().getId().equals(userId)) {
             chatRoomRepository.delete(room); // 방 주인이면 삭제
+
         } else {
             userChatRoomRepository.deleteByUserIdAndChatRoomId(userId, chatRoomId); // 참여자는 나가기
         }
@@ -128,16 +134,32 @@ public class ChatRoomService {
     }
 
     @Transactional(readOnly = true)
-    public String getInviteCode(Long chatRoomId, Long userId) {
+    public InviteCodeResponse getInviteCode(Long chatRoomId, Long userId) {
         if (!userChatRoomRepository.existsByUserIdAndChatRoomId(userId, chatRoomId)) {
             throw new SecurityException("채팅방에 참여 중인 유저만 초대 코드를 조회할 수 있습니다.");
         }
-        return chatRoomRepository.findById(chatRoomId)
+
+        String inviteCode = chatRoomRepository.findById(chatRoomId)
                 .map(ChatRoom::getInviteCode)
                 .orElseThrow(() -> new IllegalArgumentException("채팅방이 존재하지 않습니다."));
+        return new InviteCodeResponse(inviteCode);
     }
 
     private String generateInviteCode() {
         return UUID.randomUUID().toString().substring(0, 8);
+    }
+
+    public List<ChatMessageResponse> getChatInfo(Long chatRoomId) {
+        List<ChatMessage> messages = chatMessageRepository.findByRoomId(chatRoomId.toString())
+                .collectList()
+                .block();
+
+        if (messages == null) {
+            return List.of(); // 조회된 메시지가 없으면 빈 리스트 반환
+        }
+
+        return messages.stream()
+                .map(ChatMessageResponse::from)
+                .toList();
     }
 }

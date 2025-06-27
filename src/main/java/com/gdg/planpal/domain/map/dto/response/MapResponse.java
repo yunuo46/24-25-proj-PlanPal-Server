@@ -1,6 +1,7 @@
 package com.gdg.planpal.domain.map.dto.response;
 
 
+import com.gdg.planpal.domain.map.domain.Coordinates;
 import com.gdg.planpal.domain.map.domain.MapBoard;
 
 import java.time.LocalDateTime;
@@ -10,8 +11,7 @@ import java.util.stream.Collectors;
 public record MapResponse(
         Long id,
         Long chatRoomId,
-        Double centerLat,
-        Double centerLng,
+        Coordinates centerCoordinates,
         List<MapPinResponse> pins,
         LocalDateTime createdAt
 ) {
@@ -19,8 +19,7 @@ public record MapResponse(
         return new MapResponse(
                 mapBoard.getId(),
                 mapBoard.getChatRoom().getId(),
-                mapBoard.getCentorCoordinates().getLat(),
-                mapBoard.getCentorCoordinates().getLng(),
+                mapBoard.getCenterCoordinates(),
                 mapBoard.getPins().stream().map(MapPinResponse::from).collect(Collectors.toList()),
                 mapBoard.getCreatedAt()
         );
