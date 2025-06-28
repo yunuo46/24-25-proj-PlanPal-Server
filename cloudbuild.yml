@@ -30,7 +30,7 @@ steps:
     env:
       - 'CLOUDSDK_COMPUTE_REGION=asia-northeast3'
       - 'CLOUDSDK_CONTAINER_CLUSTER=autopilot-cluster-1'
-    args: ['apply', '-f', 'service.yaml']
+    args: ['apply', '-f', 'service.yml']
 
 options:
   logging: CLOUD_LOGGING_ONLY
