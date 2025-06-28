@@ -12,6 +12,7 @@ spec:
       labels:
         app: planpal-server
     spec:
+      serviceAccountName: planpal-backend-ksa
       containers:
         - name: planpal-server-container
           image: asia-northeast3-docker.pkg.dev/k8s-test-464207/k8s-server-registry/planpal-server
