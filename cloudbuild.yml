@@ -14,30 +14,22 @@ steps:
     args: ['push',
            'asia-northeast3-docker.pkg.dev/k8s-test-464207/k8s-server-registry/planpal-server:$SHORT_SHA']
 
-  # 4. GKE 클러스터에 인증
-  - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
-    env: ['KUBECONFIG=/workspace/.kube/config']
-    entrypoint: gcloud
-    args:
-      - "container"
-      - "clusters"
-      - "get-credentials"
-      - "autopilot-cluster-1"
-      - "--region"
-      - "asia-northeast3"
-
-  # 5. Deployment에 새로 빌드한 이미지 버전 적용
+  # 4. Deployment에 새로 빌드한 이미지 버전 적용
   - name: "gcr.io/cloud-builders/kubectl"
-    env: ['KUBECONFIG=/workspace/.kube/config']
+    env:
+      - 'CLOUDSDK_COMPUTE_REGION=asia-northeast3'
+      - 'CLOUDSDK_CONTAINER_CLUSTER=autopilot-cluster-1'
     args:
       - "set"
       - "image"
       - "deployment/planpal-server"
       - "planpal-server-container=asia-northeast3-docker.pkg.dev/k8s-test-464207/k8s-server-registry/planpal-server:$SHORT_SHA"
 
-  # 6. Service 적용
+  # 5. Service 적용
   - name: 'gcr.io/cloud-builders/kubectl'
-    env: ['KUBECONFIG=/workspace/.kube/config']
+    env:
+      - 'CLOUDSDK_COMPUTE_REGION=asia-northeast3'
+      - 'CLOUDSDK_CONTAINER_CLUSTER=autopilot-cluster-1'
     args: ['apply', '-f', 'service.yaml']
 
 options:
