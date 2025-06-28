@@ -14,10 +14,9 @@ spec:
     spec:
       containers:
         - name: planpal-server-container
-          image: asia-northeast3-docker.pkg.dev/gen-lang-client-0798322573/planpal-server/planpal-remote
+          image: asia-northeast3-docker.pkg.dev/k8s-test-464207/k8s-server-registry/planpal-server
           ports:
             - containerPort: 8080
-          # 🔹 시크릿을 파일로 마운트
           volumeMounts:
             - name: secret-volume
               mountPath: "/app/resources"
