@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: planpal-server
 spec:
-  replicas: 2 # 애플리케이션을 몇 개의 Pod로 실행할지 지정
+  replicas: 2
   selector:
     matchLabels:
       app: planpal-server
@@ -18,23 +18,10 @@ spec:
           ports:
             - containerPort: 8080
           volumeMounts:
-            - name: secret-volume
+            - name: secrets-volume
               mountPath: "/app/resources"
               readOnly: true
-            - name: ai-key-volume
-              mountPath: "/app/keys"
-              readOnly: true
-      # 🔹 쿠버네티스 Secret을 Volume으로 정의
       volumes:
-        - name: secret-volume
+        - name: secrets-volume
           secret:
-            secretName: planpal-remote-secret
-            items:
-              - key: secret.yml
-                path: secret.yml
-        - name: ai-key-volume
-          secret:
-            secretName: planpal-ai-secret
-            items:
-              - key: gemini-ai-key.json
-                path: gemini-ai-key.json
+            secretName: planpal-config-secret
