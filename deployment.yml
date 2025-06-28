@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: planpal-server
+spec:
+  replicas: 2 # 애플리케이션을 몇 개의 Pod로 실행할지 지정
+  selector:
+    matchLabels:
+      app: planpal-server
+  template:
+    metadata:
+      labels:
+        app: planpal-server
+    spec:
+      containers:
+        - name: planpal-server-container
+          image: asia-northeast3-docker.pkg.dev/gen-lang-client-0798322573/planpal-server/planpal-remote
+          ports:
+            - containerPort: 8080
+          # 🔹 시크릿을 파일로 마운트
+          volumeMounts:
+            - name: secret-volume
+              mountPath: "/app/resources"
+              readOnly: true
+            - name: ai-key-volume
+              mountPath: "/app/keys"
+              readOnly: true
+      # 🔹 쿠버네티스 Secret을 Volume으로 정의
+      volumes:
+        - name: secret-volume
+          secret:
+            secretName: planpal-remote-secret
+            items:
+              - key: secret.yml
+                path: secret.yml
+        - name: ai-key-volume
+          secret:
+            secretName: planpal-ai-secret
+            items:
+              - key: gemini-ai-key.json
+                path: gemini-ai-key.json
