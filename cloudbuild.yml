@@ -19,11 +19,13 @@ steps:
     env:
       - 'CLOUDSDK_COMPUTE_REGION=asia-northeast3'
       - 'CLOUDSDK_CONTAINER_CLUSTER=autopilot-cluster-1'
+    entrypoint: 'sh'
     args:
-      - "set"
-      - "image"
-      - "deployment/planpal-server"
-      - "planpal-server-container=asia-northeast3-docker.pkg.dev/k8s-test-464207/k8s-server-registry/planpal-server:$SHORT_SHA"
+      - '-c'
+      - |
+        gcloud container clusters get-credentials autopilot-cluster-1 --region asia-northeast3 --project k8s-test-464207
+        sed -i "s|IMAGE_TAG_PLACEHOLDER|$SHORT_SHA|g" deployment.yml
+        kubectl apply -f deployment.yml
 
   # 5. Service 적용
   - name: 'gcr.io/cloud-builders/kubectl'
