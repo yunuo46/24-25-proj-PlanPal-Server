@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: planpal-server
+spec:
+  replicas: 2 # 수평 확장
+  selector:
+    matchLabels:
+      app: planpal-server
+  template:
+    metadata:
+      labels:
+        app: planpal-server
+    spec:
+      serviceAccountName: planpal-backend-ksa
+      containers:
+        - name: planpal-server-container
+          image: asia-northeast3-docker.pkg.dev/k8s-test-464207/k8s-server-registry/planpal-server
+          ports:
+            - containerPort: 8080
+          resources: # 수직 확장
+            requests:
+              cpu: "1000m" # 1 Core
+              memory: "4Gi"  # 4 GiB
+            limits:
+              cpu: "2000m" # Max 2 Core
+              memory: "8Gi"  # Max 8 GiB
+          volumeMounts:
+            - name: secrets-volume
+              mountPath: "/app/resources"
+              readOnly: true
+      volumes:
+        - name: secrets-volume
+          secret:
+            secretName: planpal-config-secret

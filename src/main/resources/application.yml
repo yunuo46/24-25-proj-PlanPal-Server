@@ -10,11 +10,16 @@ spring:
     vertex:
       ai:
         gemini:
-          project-id: "gen-lang-client-0798322573"
+          project-id: "k8s-test-464207"
           location: "us-central1"
           chat:
             options:
               model: gemini-2.0-flash
   config:
-    import: classpath:secret.yml
+    #import: classpath:secret.yml
+    import: file:/app/resources/secret.yml
 
+app:
+  gcp:
+    #key-path: classpath:gemini-ai-key.json
+    key-path: file:/app/resources/gemini-ai-key.json

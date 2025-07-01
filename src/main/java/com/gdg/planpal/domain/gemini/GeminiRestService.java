@@ -12,6 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
+import org.springframework.core.io.Resource;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -19,6 +20,9 @@ import java.util.List;
 import java.util.Map;
 @Service
 public class GeminiRestService {
+    @Value("${app.gcp.key-path}")
+    private Resource gcpKeyResource;
+
     private static final String BASE_URL = "https://{location}-aiplatform.googleapis.com";
     private static final String ENDPOINT = "/v1beta1/projects/{project}/locations/{location}/publishers/google/models/{model}:generateContent";
 
@@ -40,10 +44,8 @@ public class GeminiRestService {
 
         String accessToken="";
         try {
-            ClassPathResource resource = new ClassPathResource("gemini-ai-key.json");
-
             GoogleCredentials credentials = GoogleCredentials
-                    .fromStream(resource.getInputStream())
+                    .fromStream(gcpKeyResource.getInputStream())
                     .createScoped(Collections.singletonList("https://www.googleapis.com/auth/cloud-platform"));
 
             credentials.refreshIfExpired();
