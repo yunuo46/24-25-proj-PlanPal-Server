@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: planpal-server
 spec:
-  replicas: 4 # 수평 확장
+  replicas: 8 # 수평 확장
   selector:
     matchLabels:
       app: planpal-server
